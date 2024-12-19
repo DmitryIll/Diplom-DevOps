@@ -1,0 +1,12 @@
+# вопросы
+
+Нужно ли ограничивать сверху версию провайдера, чтобы не более чем мажерная которая сейчас используется?
+
+Сейчас:
+
+provider "registry.terraform.io/yandex-cloud/yandex" {
+  version = "0.133.0"
+  hashes = [
+    "h1:WHnFVkDoiv9sy/owV8MwQAEl5RSQjfEcaHzEvT9n19c=",
+  ]
+}
