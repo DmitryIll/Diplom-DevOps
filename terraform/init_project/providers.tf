@@ -32,7 +32,7 @@ backend "s3" {
 
     # dynamodb_table = "tfstate-lock-diplom"
     dynamodb_table = "tflock-dip"
-     dynamodb_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gq7flktn6couidedto/etnse5q9qvt1ip1i5o5u"
+     dynamodb_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gq7flktn6couidedto/etn47ui4t7bbudrrojtc"
     # dynamodb_endpoint = "${file("./dynamodbapi")}"
      skip_region_validation      = true
      skip_credentials_validation = true
@@ -58,7 +58,7 @@ provider "aws" {
   region = "ru-central1"
   # тут нужно обновить ендпоинт, после создания S3
   endpoints {
-    dynamodb = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gq7flktn6couidedto/etnse5q9qvt1ip1i5o5u"
+    dynamodb = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gq7flktn6couidedto/etn47ui4t7bbudrrojtc"
   }
   # profile = "<profile_name>"
   skip_credentials_validation = true

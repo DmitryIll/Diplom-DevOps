@@ -164,7 +164,7 @@ resource "yandex_resourcemanager_folder_iam_member" "storage_editor" {
   folder_id = local.folder_id
   role      = "storage.editor" # "storage.admin"
   member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
-  # depends_on = [yandex_iam_service_account.sa_trr]
+  depends_on = [yandex_iam_service_account.sa_trr]
 }
 
 
@@ -173,7 +173,7 @@ resource "yandex_resourcemanager_folder_iam_member" "ydb_editor" {
   folder_id = local.folder_id
   role      = "ydb.editor" 
   member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
-  # depends_on = [yandex_iam_service_account.sa_trr]
+  depends_on = [yandex_iam_service_account.sa_trr]
 }
 
 # Создание статического ключа доступа
@@ -184,6 +184,7 @@ resource "yandex_iam_service_account_static_access_key" "sa_static_key_trr" {
 
 # Создание бакета с использованием ключа 
 resource "yandex_storage_bucket" "s3_backet_trr" {
+  depends_on = [yandex_iam_service_account.sa_trr, yandex_iam_service_account_static_access_key.sa_static_key_trr]
   access_key = yandex_iam_service_account_static_access_key.sa_static_key_trr.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa_static_key_trr.secret_key
   bucket = var.bucket_name_trr
@@ -197,6 +198,7 @@ resource "yandex_storage_bucket" "s3_backet_trr" {
 
 
 resource "yandex_ydb_database_serverless" "db_tfstate_lock" {
+  depends_on = [yandex_resourcemanager_folder_iam_member.ydb_editor]
   name                = "ydb-tfstate-lock"
   # deletion_protection = true
 
