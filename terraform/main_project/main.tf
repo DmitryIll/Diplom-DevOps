@@ -152,12 +152,11 @@ user: request-id = e1fb0072-62e3-4850-b70d-35dec0c0c86c rpc error: code = Permis
 ------------------------------------------------------------------------------------------------------
 */
 
-
+/*
 # Создаем сервисный аккаунт для terraform в т.ч. для работы с S3 backet
 resource "yandex_iam_service_account" "sa_trr" {
   folder_id = local.folder_id
   name      = "sa-trr"
-    
 }
 
 # Назначение роли сервисному аккаунту для S3
@@ -166,7 +165,6 @@ resource "yandex_resourcemanager_folder_iam_member" "storage_editor" {
   role      = "storage.editor" # "storage.admin"
   member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
   depends_on = [yandex_iam_service_account.sa_trr]
-  
 }
 
 
@@ -177,23 +175,6 @@ resource "yandex_resourcemanager_folder_iam_member" "ydb_editor" {
   member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
   depends_on = [yandex_iam_service_account.sa_trr]
 }
-
-# Назначение роли сервисному аккаунту для создания vpc
-resource "yandex_resourcemanager_folder_iam_member" "vpc_admin" {
-  folder_id = local.folder_id
-  role      = "vpc.admin" 
-  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
-  depends_on = [yandex_iam_service_account.sa_trr]
-}
-
-# Назначение роли сервисному аккаунту для создания vpc
-resource "yandex_resourcemanager_folder_iam_member" "compute_editor" {
-  folder_id = local.folder_id
-  role      = "compute.editor" 
-  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
-  depends_on = [yandex_iam_service_account.sa_trr]
-}
-
 
 # Создание статического ключа доступа
 resource "yandex_iam_service_account_static_access_key" "sa_static_key_trr" {
@@ -219,7 +200,7 @@ resource "yandex_storage_bucket" "s3_backet_trr" {
 resource "yandex_ydb_database_serverless" "db_tfstate_lock" {
   depends_on = [yandex_resourcemanager_folder_iam_member.ydb_editor]
   name                = "ydb-tfstate-lock"
-  deletion_protection = true
+  # deletion_protection = true
 
   serverless_database {
     enable_throttling_rcu_limit = false
@@ -253,3 +234,4 @@ resource "aws_dynamodb_table" "tflock-dip" {
 #   depends_on = [yandex_storage_bucket.s3_backet_trr]
 # }
 
+*/

@@ -18,7 +18,7 @@ terraform {
 # при первом запуске пока еще нет S3 в облаке - закоментировать
 # при втором запуске - раскомментировать - tfsate переедет в S3.
 
-# /* ----- S3 будем делать уже в другом проекте
+# /* ----- S3 
 backend "s3" {
     
     endpoints = {
@@ -27,7 +27,7 @@ backend "s3" {
     # endpoint = "https://storage.yandexcloud.net"
     bucket = "s3bucket-trr"
     region = "ru-central1-a"
-    key    = "initpoject/terraform.tfstate"
+    key    = "mainpoject/terraform.tfstate"
     profile = "default"
 
     # dynamodb_table = "tfstate-lock-diplom"
@@ -45,7 +45,8 @@ backend "s3" {
 }
 
 provider "yandex" {
-  token = "${file("./yctoken")}"
+  # token = "${file("./yctoken")}"
+  service_account_key_file = file("../../../trr-keys/sa-trr/authorized_key.json")
   cloud_id = "${file("./cloudid")}"
   folder_id = local.folder_id
   # folder_id = "${file("./folderid")}"
