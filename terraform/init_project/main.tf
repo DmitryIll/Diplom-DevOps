@@ -195,6 +195,39 @@ resource "yandex_resourcemanager_folder_iam_member" "compute_editor" {
 }
 
 
+# Назначение роли k8s.clusters.agent сервисному аккаунту для kubernetis
+resource "yandex_resourcemanager_folder_iam_member" "k8s_clusters_agent" {
+  folder_id = local.folder_id
+  role      = "k8s.clusters.agent" 
+  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
+  depends_on = [yandex_iam_service_account.sa_trr]
+}
+
+# Назначение роли vpc.publicAdmin сервисному аккаунту для kubernetis
+resource "yandex_resourcemanager_folder_iam_member" "vpc_publicAdmin" {
+  folder_id = local.folder_id
+  role      = "vpc.publicAdmin" 
+  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
+  depends_on = [yandex_iam_service_account.sa_trr]
+}
+
+# Назначение роли  container-registry.images.puller сервисному аккаунту для kubernetis
+resource "yandex_resourcemanager_folder_iam_member" "container_registry_images_puller" {
+  folder_id = local.folder_id
+  role      = "container-registry.images.puller" 
+  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
+  depends_on = [yandex_iam_service_account.sa_trr]
+}
+
+# Для создания кластера с туннельным режимом его сервисному аккаунту необходима роль k8s.tunnelClusters.agent.
+# Назначение роли  container-registry.images.puller сервисному аккаунту для kubernetis
+resource "yandex_resourcemanager_folder_iam_member" "k8s_tunnelClusters_agent" {
+  folder_id = local.folder_id
+  role      = "k8s.tunnelClusters.agent" 
+  member    = "serviceAccount:${yandex_iam_service_account.sa_trr.id}"
+  depends_on = [yandex_iam_service_account.sa_trr]
+}
+
 # Создание статического ключа доступа
 resource "yandex_iam_service_account_static_access_key" "sa_static_key_trr" {
   service_account_id = yandex_iam_service_account.sa_trr.id
