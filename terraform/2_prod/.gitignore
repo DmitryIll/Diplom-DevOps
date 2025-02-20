@@ -4,7 +4,7 @@
 
 .activate-profile-*.sh
 .create-profile-*.sh
-.env
+.env*
 .key.json
 .key*
 .yctoken
