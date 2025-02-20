@@ -3,7 +3,7 @@
 # }
 
 resource "yandex_resourcemanager_cloud_iam_member" "vpc_admin_prod" {
-  cloud_id = output.init_cloud_id #var.cloud_prod_id 
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
   role     = "vpc.admin"
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
