@@ -2,8 +2,8 @@
 
 **/keys/*
 
-.activate-profile-*.sh
-.create-profile-*.sh
+# .activate-profile-*.sh
+# .create-profile-*.sh
 .env
 .key.json
 .key*
