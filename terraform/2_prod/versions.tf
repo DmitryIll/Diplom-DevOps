@@ -21,9 +21,9 @@ terraform {
 # }
 
 provider "yandex" {
-  # token = file(".yctoken")
+  token = file(".yctoken")
   # service_account_key_file = file(".key_prod.json")
-  service_account_key_file = file(".key.json")
+  # service_account_key_file = file(".key.json")
   # cloud_id = var.organization_id
   # folder_id = "b1goqpmqf33kl450j47i"
   # zone = local.zone
