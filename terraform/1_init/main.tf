@@ -12,8 +12,8 @@ resource "random_string" "unique_id" {
 }
 
 # Service account supposed to be used as the main subject to run org-level privileged operations (create cloud etc.)
-resource "yandex_iam_service_account" "sa-tf" {
-  name        = "init-sa-tf"
+resource "yandex_iam_service_account" "sa_tf" {
+  name        = "sa-tf"
   description = "Service account for Terraform"
   folder_id   = local.folder_id
 }
@@ -23,7 +23,7 @@ resource "yandex_organizationmanager_organization_iam_binding" "org_admin_for_sa
   organization_id = var.organization_id
   role            = "organization-manager.admin"
   members = [
-    "serviceAccount:${yandex_iam_service_account.sa-tf.id}",
+    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
   ]
 }
 
@@ -32,31 +32,31 @@ resource "yandex_organizationmanager_organization_iam_binding" "biling_editor_fo
   organization_id = var.organization_id
   role            = "billing.accounts.editor"
   members = [
-    "serviceAccount:${yandex_iam_service_account.sa-tf.id}",
+    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
   ]
 }
 
 # Grant the service account the resource-manager.admin role
-resource "yandex_organizationmanager_organization_iam_binding" "resource_manager_admin_for_sa_t" {
+resource "yandex_organizationmanager_organization_iam_binding" "resource_manager_admin_for_sa_tf" {
   organization_id = var.organization_id
   role            = "resource-manager.admin"
   members = [
-    "serviceAccount:${yandex_iam_service_account.sa-tf.id}",
+    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
   ]
 }
 
 # Grant the service account the iam.admin role
-resource "yandex_organizationmanager_organization_iam_binding" "iam_admin_for_sa_t" {
+resource "yandex_organizationmanager_organization_iam_binding" "iam_admin_for_sa_tf" {
   organization_id = var.organization_id
   role            = "iam.admin"
   members = [
-    "serviceAccount:${yandex_iam_service_account.sa-tf.id}",
+    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
   ]
 }
 
 # Create an authorized access key for the service account
-resource "yandex_iam_service_account_key" "sa-auth-key" {
-  service_account_id = yandex_iam_service_account.sa-tf.id
+resource "yandex_iam_service_account_key" "sa_auth_key" {
+  service_account_id = yandex_iam_service_account.sa_tf.id
   description        = "Key for service account"
   key_algorithm      = "RSA_2048"
 }
@@ -65,12 +65,12 @@ resource "yandex_iam_service_account_key" "sa-auth-key" {
 resource "local_file" "key" {
   content  = <<EOH
   {
-    "id": "${yandex_iam_service_account_key.sa-auth-key.id}",
-    "service_account_id": "${yandex_iam_service_account.sa-tf.id}",
-    "created_at": "${yandex_iam_service_account_key.sa-auth-key.created_at}",
-    "key_algorithm": "${yandex_iam_service_account_key.sa-auth-key.key_algorithm}",
-    "public_key": ${jsonencode(yandex_iam_service_account_key.sa-auth-key.public_key)},
-    "private_key": ${jsonencode(yandex_iam_service_account_key.sa-auth-key.private_key)}
+    "id": "${yandex_iam_service_account_key.sa_auth_key.id}",
+    "service_account_id": "${yandex_iam_service_account.sa_tf.id}",
+    "created_at": "${yandex_iam_service_account_key.sa_auth_key.created_at}",
+    "key_algorithm": "${yandex_iam_service_account_key.sa_auth_key.key_algorithm}",
+    "public_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key.public_key)},
+    "private_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key.private_key)}
   }
   EOH
   filename = ".key.json"
@@ -79,5 +79,5 @@ resource "local_file" "key" {
 
 output "init_service_account_id" {
   description = "init service account ID"
-  value       = yandex_iam_service_account.sa-tf.id
+  value       = yandex_iam_service_account.sa_tf.id
 }

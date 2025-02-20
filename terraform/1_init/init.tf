@@ -15,7 +15,7 @@ module "init" {
 
   folders = [
     {
-      name        = "tfsate-backend"
+      name        = "tfsate"
       description = "Contains TF state bucket and locks table for IAC state."
     }
   ]

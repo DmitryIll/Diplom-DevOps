@@ -1,27 +1,27 @@
 # Grant the service account the storage.admin role
-resource "yandex_resourcemanager_folder_iam_member" "sa-tf-admin-s3" {
+resource "yandex_resourcemanager_folder_iam_member" "sa_tf_editor_s3" {
   folder_id = local.folder_id
-  role      = "storage.admin"
-  member    = "serviceAccount:${yandex_iam_service_account.sa-tf.id}"
+  role      = "storage.editor"
+  member    = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
 # Grant the service account the kms.editor role
-resource "yandex_resourcemanager_folder_iam_member" "sa-tf-editor-kms" {
+resource "yandex_resourcemanager_folder_iam_member" "sa_tf_editor_kms" {
   folder_id = local.folder_id
   role      = "kms.editor"
-  member    = "serviceAccount:${yandex_iam_service_account.sa-tf.id}"
+  member    = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
 # Grant the service account the ydb.editor role
-resource "yandex_resourcemanager_folder_iam_member" "sa-tf-editor-ydb" {
+resource "yandex_resourcemanager_folder_iam_member" "sa_tf_editor_ydb" {
   folder_id = local.folder_id
   role      = "ydb.editor"
-  member    = "serviceAccount:${yandex_iam_service_account.sa-tf.id}"
+  member    = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
 # Create a static access key
-resource "yandex_iam_service_account_static_access_key" "sa-tf-static-key" {
-  service_account_id = yandex_iam_service_account.sa-tf.id
+resource "yandex_iam_service_account_static_access_key" "sa_tf_static_key" {
+  service_account_id = yandex_iam_service_account.sa_tf.id
   description        = "Static access key for bucket ${local.init_bucket_name} and YDB"
 }
 
@@ -66,14 +66,14 @@ resource "aws_dynamodb_table" "lock_table" {
     name = "LockID"
     type = "S"
   }
-  depends_on = [time_sleep.wait_for_database, yandex_resourcemanager_folder_iam_member.sa-tf-editor-ydb, yandex_iam_service_account_static_access_key.sa-tf-static-key]
+  depends_on = [time_sleep.wait_for_database, yandex_resourcemanager_folder_iam_member.sa_tf_editor_ydb, yandex_iam_service_account_static_access_key.sa_tf_static_key]
 }
 
 # Create a .env file with access keys
 resource "local_file" "env" {
   content  = <<EOF
-export AWS_ACCESS_KEY_ID="${yandex_iam_service_account_static_access_key.sa-tf-static-key.access_key}"
-export AWS_SECRET_ACCESS_KEY="${yandex_iam_service_account_static_access_key.sa-tf-static-key.secret_key}"
+export AWS_ACCESS_KEY_ID="${yandex_iam_service_account_static_access_key.sa_tf_static_key.access_key}"
+export AWS_SECRET_ACCESS_KEY="${yandex_iam_service_account_static_access_key.sa_tf_static_key.secret_key}"
 EOF
   filename = ".env"
 }
@@ -82,27 +82,27 @@ EOF
 resource "local_file" "create_yc_profile" {
   content  = <<EOF
 #!/bin/bash
-yc config profile create ${yandex_iam_service_account.sa-tf.name}
+yc config profile create ${yandex_iam_service_account.sa_tf.name}
 yc config set organization-id ${var.organization_id}
 yc config set cloud-id ${module.init.cloud_id}
 yc config set folder-id ${module.init.folders[0].id}
 yc config set service-account-key .key.json
 EOF
-  filename = ".create-profile-${yandex_iam_service_account.sa-tf.name}.sh"
+  filename = ".create-profile-${yandex_iam_service_account.sa_tf.name}.sh"
 }
 
 # Script .activate-profile-<service_account_name>.sh to activate YC profile for service account
 resource "local_file" "activate_yc_profile" {
   content  = <<EOF
 #!/bin/bash
-yc config profile activate ${yandex_iam_service_account.sa-tf.name}
+yc config profile activate ${yandex_iam_service_account.sa_tf.name}
 export YC_TOKEN=$(yc iam create-token)
 export IAM_TOKEN=$(yc iam create-token)
 export YC_CLOUD_ID=$(yc config get cloud-id)
 export YC_FOLDER_ID=$(yc config get folder-id)
 source .env
 EOF
-  filename = ".activate-profile-${yandex_iam_service_account.sa-tf.name}.sh"
+  filename = ".activate-profile-${yandex_iam_service_account.sa_tf.name}.sh"
 }
 
 # Instructions regarding how to migrate to remote Terraform state
@@ -116,8 +116,8 @@ To migrate to remote Terraform state follow this steps:
 
 Optionally:
 - to create and configure new YC profile for service account `${yandex_iam_service_account.sa-tf.name}` execute:
-  ./.create-profile-${yandex_iam_service_account.sa-tf.name}.sh
-  source ./.activate-profile-${yandex_iam_service_account.sa-tf.name}.sh
+  ./.create-profile-${yandex_iam_service_account.sa_tf.name}.sh
+  source ./.activate-profile-${yandex_iam_service_account.sa_tf.name}.sh
 ***************
 EOF
 }

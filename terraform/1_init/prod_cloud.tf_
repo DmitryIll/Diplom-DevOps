@@ -20,36 +20,31 @@ module "cloud_prod" {
     #   description = "Contains TF state bucket and locks table for IAC state."
     # },
     {
-      name        = "infra-site-prod"
+      name        = "infra-prod"
       description = "Ifrastructure for podaction site."
     }
   ]
   groups = [
     { # Org admin - roles : organization.admin
-      name        = "site-prod-admin"
-      description = "site-prod admin group"
+      name        = "ifra-prod-admin"
+      description = "infra-prod-admin-group"
       members     = var.root_organization_admins
     },
   ]
 }
 
-# resource "yandex_billing_cloud_binding" "mycloud" {
-#   billing_account_id = var.billing_account_id
-#   cloud_id           = module.cloud_prod.cloud_id
-# }
-
 output "cloud_prod_id" {
-  description = "ID of the cloud 'cloud-adm'"
+  description = "ID of the cloud 'cloud-prod'"
   value       = module.cloud_prod.cloud_id
 }
 
 output "cloud_prod_name" {
-  description = "Name of the cloud 'cloud-adm'"
+  description = "Name of the cloud 'cloud-prod'"
   value       = module.cloud_prod.cloud_name
 }
 
 output "cloud_prod_folders" {
-  description = "List of folders created in 'cloud-adm'"
+  description = "List of folders created in 'cloud-prod'"
   value       = module.cloud_prod.folders
 }
 
