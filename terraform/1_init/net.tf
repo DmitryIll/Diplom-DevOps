@@ -15,19 +15,19 @@ module "net" {
     {
       "v4_cidr_blocks" : ["10.121.0.0/16"],
       "zone" : "ru-central1-a",
-      "folder_id" : local.folder_id_prod, # folder_id_workload
+      "folder_id" : local.folder_id, # folder_id_workload
       "name" : "subnet-ru-central1-a"
     },
     {
       "v4_cidr_blocks" : ["10.131.0.0/16"],
       "zone" : "ru-central1-b",
-      "folder_id" : local.folder_id_prod, #folder_id_workload
+      "folder_id" : local.folder_id, #folder_id_workload
       "name" : "subnet-ru-central1-b"
     },
     {
       "v4_cidr_blocks" : ["10.141.0.0/16"],
       "zone" : "ru-central1-d",
-      "folder_id" : local.folder_id_prod, #folder_id_workload
+      "folder_id" : local.folder_id, #folder_id_workload
       "name" : "subnet-ru-central1-d"
     },
   ]
