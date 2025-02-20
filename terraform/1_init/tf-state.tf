@@ -5,6 +5,13 @@ resource "yandex_resourcemanager_folder_iam_member" "sa_tf_editor_s3" {
   member    = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "sa_tf_admin_s3" {
+  folder_id = local.folder_id
+  role      = "storage.admin"
+  member    = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+
 # Grant the service account the kms.editor role
 resource "yandex_resourcemanager_folder_iam_member" "sa_tf_editor_kms" {
   folder_id = local.folder_id
@@ -115,7 +122,7 @@ To migrate to remote Terraform state follow this steps:
 3. Run `terraform init -migrate-state` to migrate to remote state.
 
 Optionally:
-- to create and configure new YC profile for service account `${yandex_iam_service_account.sa-tf.name}` execute:
+- to create and configure new YC profile for service account `${yandex_iam_service_account.sa_tf.name}` execute:
   ./.create-profile-${yandex_iam_service_account.sa_tf.name}.sh
   source ./.activate-profile-${yandex_iam_service_account.sa_tf.name}.sh
 ***************

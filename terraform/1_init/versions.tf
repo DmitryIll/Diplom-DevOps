@@ -21,8 +21,8 @@ terraform {
 # }
 
 provider "yandex" {
-  token = file(".yctoken")
-  # service_account_key_file = file(".key.json")
+  # token = file(".yctoken")
+  service_account_key_file = file(".key.json")
   # cloud_id = var.organization_id
   # folder_id = "b1goqpmqf33kl450j47i"
   # zone = local.zone
@@ -33,8 +33,8 @@ provider "aws" {
   skip_credentials_validation = true
   skip_requesting_account_id  = true
   skip_metadata_api_check     = true
-  access_key                  = yandex_iam_service_account_static_access_key.sa-tf-static-key.access_key
-  secret_key                  = yandex_iam_service_account_static_access_key.sa-tf-static-key.secret_key
+  access_key                  = yandex_iam_service_account_static_access_key.sa_tf_static_key.access_key
+  secret_key                  = yandex_iam_service_account_static_access_key.sa_tf_static_key.secret_key
   endpoints {
     dynamodb = yandex_ydb_database_serverless.database.document_api_endpoint
   }
