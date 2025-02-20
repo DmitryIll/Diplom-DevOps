@@ -2,6 +2,12 @@
 #   folder_id_workload        = var.cloud_prod_folders[0].id
 # }
 
+resource "yandex_resourcemanager_cloud_iam_member" "vpc_admin_prod" {
+  cloud_id = output.init_cloud_id #var.cloud_prod_id 
+  role     = "vpc.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
 module "net" {
   # source              = "git::https://github.com/terraform-yc-modules/terraform-yc-vpc.git?ref=1.0.6"
   source              = "git::https://github.com/DmitryIll/terraform-yc-vpc.git"
