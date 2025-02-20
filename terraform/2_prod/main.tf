@@ -69,12 +69,6 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateAdmin_prod" {
 
 
 
-# Create a static access key
-resource "yandex_iam_service_account_static_access_key" "sa_tf_static_key_prod" {
-  service_account_id = yandex_iam_service_account.sa_tf_prod.id
-  description        = "Static access key for bucket ${local.prod_bucket_name} and YDB"
-}
-
 # Create an authorized access key for the service account
 resource "yandex_iam_service_account_key" "sa_auth_key_prod" {
   service_account_id = yandex_iam_service_account.sa_tf_prod.id
