@@ -2,11 +2,11 @@
 
 **/keys/*
 
+.yctoken
 cloudid
-folderid
 id_ed25519
-yctoken
-
+folderid
+*.env*
 
 # Local .terraform directories
 **/.terraform/*

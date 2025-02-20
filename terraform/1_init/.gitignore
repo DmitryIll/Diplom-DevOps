@@ -2,11 +2,17 @@
 
 **/keys/*
 
-cloudid
-folderid
-id_ed25519
-yctoken
+.activate-profile-*.sh
+.create-profile-*.sh
+.env
+.key.json
+.key*
+.yctoken
 
+yctoken
+cloudid
+id_ed25519
+folderid
 
 # Local .terraform directories
 **/.terraform/*
