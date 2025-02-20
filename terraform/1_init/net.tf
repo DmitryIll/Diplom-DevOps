@@ -8,6 +8,52 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_admin_prod" {
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud_resource_manager_admin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "resource-manager.admin"
+  member =  "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud_IAM_admin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "iam.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+
+resource "yandex_resourcemanager_cloud_iam_member" "vpc_gateways_editor_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "vpc.gateways.editor"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+# resource "yandex_resourcemanager_folder_iam_member" "vpc_gateways_editor_prod" {
+#   folder_id = local.folder_id_prod
+#   role     = "vpc.gateways.editor"
+#   member = "serviceAccount:${yandex_iam_service_account.sa_tf_prod.id}"
+# }
+
+resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateEndpoints_admin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "vpc.privateEndpoints.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "vpc_securityGroups_admin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "vpc.securityGroups.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateAdmin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "vpc.privateAdmin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+
+
 module "net" {
   # source              = "git::https://github.com/terraform-yc-modules/terraform-yc-vpc.git?ref=1.0.6"
   source              = "git::https://github.com/DmitryIll/terraform-yc-vpc.git"
