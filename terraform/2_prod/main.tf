@@ -68,6 +68,42 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateAdmin_prod" {
 }
 
 
+
+# Create a static access key
+resource "yandex_iam_service_account_static_access_key" "sa_tf_static_key_prod" {
+  service_account_id = yandex_iam_service_account.sa_tf_prod.id
+  description        = "Static access key for bucket ${local.prod_bucket_name} and YDB"
+}
+
+# Create an authorized access key for the service account
+resource "yandex_iam_service_account_key" "sa_auth_key_prod" {
+  service_account_id = yandex_iam_service_account.sa_tf_prod.id
+  description        = "Key for service account"
+  key_algorithm      = "RSA_2048"
+}
+
+# Export the key to a file (.key-prod.json) to create a YC profile later
+resource "local_file" "key-prod" {
+  content  = <<EOH
+  {
+    "id": "${yandex_iam_service_account_key.sa_auth_key_prod.id}",
+    "service_account_id": "${yandex_iam_service_account.sa_tf_prod.id}",
+    "created_at": "${yandex_iam_service_account_key.sa_auth_key_prod.created_at}",
+    "key_algorithm": "${yandex_iam_service_account_key.sa_auth_key_prod.key_algorithm}",
+    "public_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key_prod.public_key)},
+    "private_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key_prod.private_key)}
+  }
+  EOH
+  filename = ".key_prod.json"
+}
+
+
+output "prod_service_account_id" {
+  description = "prod service account ID"
+  value       = yandex_iam_service_account.sa_tf_prod.id
+}
+
+
 # ----- черновики-заметки-----------------
 # resource "yandex_resourcemanager_folder_iam_member" "acc_binding" {
 #   folder_id = data.yandex_resourcemanager_folder.acc_folder[split(":", each.key)[2]].id
@@ -125,30 +161,4 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateAdmin_prod" {
 #   ]
 # }
 
-# Create an authorized access key for the service account
-resource "yandex_iam_service_account_key" "sa_auth_key_prod" {
-  service_account_id = yandex_iam_service_account.sa_tf_prod.id
-  description        = "Key for service account"
-  key_algorithm      = "RSA_2048"
-}
 
-# Export the key to a file (.key-prod.json) to create a YC profile later
-resource "local_file" "key-prod" {
-  content  = <<EOH
-  {
-    "id": "${yandex_iam_service_account_key.sa_auth_key_prod.id}",
-    "service_account_id": "${yandex_iam_service_account.sa_tf_prod.id}",
-    "created_at": "${yandex_iam_service_account_key.sa_auth_key_prod.created_at}",
-    "key_algorithm": "${yandex_iam_service_account_key.sa_auth_key_prod.key_algorithm}",
-    "public_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key_prod.public_key)},
-    "private_key": ${jsonencode(yandex_iam_service_account_key.sa_auth_key_prod.private_key)}
-  }
-  EOH
-  filename = ".key_prod.json"
-}
-
-
-output "prod_service_account_id" {
-  description = "prod service account ID"
-  value       = yandex_iam_service_account.sa_tf_prod.id
-}
