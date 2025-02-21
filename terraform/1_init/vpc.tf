@@ -35,6 +35,11 @@ resource "yandex_resourcemanager_cloud_iam_member" "cloud_IAM_admin_prod" {
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "foder_IAM_admin_prod" {
+  folder_id = module.init.folders[0].id 
+  role     = "iam.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
 
 resource "yandex_resourcemanager_cloud_iam_member" "vpc_gateways_editor_prod" {
   cloud_id = module.init.cloud_id #var.cloud_prod_id 
