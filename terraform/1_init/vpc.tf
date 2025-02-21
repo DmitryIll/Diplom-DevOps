@@ -4,6 +4,12 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_admin_prod" {
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "vpc_folder_admin_prod" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "vpc.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
 resource "yandex_resourcemanager_cloud_iam_member" "vpc_user_prod" {
   cloud_id = module.init.cloud_id #var.cloud_prod_id 
   role     = "vpc.user"
