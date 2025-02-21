@@ -8,7 +8,7 @@ resource "yandex_vpc_subnet" "public_a" {
   name           = "public-a"
   zone           = "ru-central1-a"
   v4_cidr_blocks = ["10.1.1.0/24"]
-  network_id     = "${yandex_vpc_network.prod-net.id}"
+  network_id     = "${yandex_vpc_network.prod_net.id}"
 }
 
 # resource "yandex_vpc_subnet" "public_b" {
