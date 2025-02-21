@@ -29,7 +29,7 @@ resource "yandex_vpc_subnet" "private_a" {
   name           = "private-a"
   zone           = "ru-central1-a"
   v4_cidr_blocks = ["10.2.1.0/24"]
-  network_id     = "${yandex_vpc_network.pod_net.id}"
+  network_id     = "${yandex_vpc_network.prod_net.id}"
   route_table_id = yandex_vpc_route_table.rt_priv.id
 }
 
