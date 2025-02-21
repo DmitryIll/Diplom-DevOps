@@ -1,4 +1,4 @@
-count_vm = 2
+count_vm = 1
 
 vm=[
       {name = "vm1"
