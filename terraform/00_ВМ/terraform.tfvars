@@ -1,10 +1,32 @@
-count_vm = 1
+count_vm = 2
 
 vm=[
       {name = "vm1"
       image = "fd82nvvtllmimo92uoul"   # ubuntu 22.04
       cpu = 2
       core_fraction = 20
+      ram = 4
+      disk_size = 16
+      allow_stopping = true
+      platform = "standard-v1"
+      zone = "ru-central1-a"
+      preemptible = true
+      nat = true
+      cmd =[
+        "wget https://hashicorp-releases.yandexcloud.net/terraform/1.10.5/terraform_1.10.5_linux_amd64.zip",
+        "apt install -y unzip",
+        "unzip terraform_1.10.5_linux_amd64.zip -d /root",
+        "mv /root/terraform /bin/trr",
+        "curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash",
+        "chmod 400 /root/.ssh/id_ed25519",
+        "git clone -b terraform-03 https://github.com/DmitryIll/terraform-uprav-constr.git",        
+        "cp terraform-uprav-constr/src/.terraformrc /root/",
+      #   "trr init",
+      ]},
+      {name = "vm2"
+      image = "fd82nvvtllmimo92uoul"   # ubuntu 22.04
+      cpu = 2
+      core_fraction = 100
       ram = 4
       disk_size = 16
       allow_stopping = true
