@@ -12,7 +12,7 @@ resource "yandex_resourcemanager_folder_iam_member" "vpc_folder_admin_prod" {
 
 resource "yandex_resourcemanager_folder_iam_member" "folder_compute_admin_prod" {
   folder_id = module.init.folders[0].id 
-  role     = "compute.admin"
+  roles     = {"compute.admin","compute.osLogin", "compute.operator"}
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
