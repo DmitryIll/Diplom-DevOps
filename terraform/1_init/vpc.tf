@@ -22,6 +22,13 @@ resource "yandex_resourcemanager_cloud_iam_member" "cloud_resource_manager_admin
   member =  "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+
+resource "yandex_resourcemanager_folder_iam_member" "folder_resource_manager_admin_prod" {
+  folder_id = module.init.folders[0].id 
+  role     = "resource-manager.admin"
+  member =  "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
 resource "yandex_resourcemanager_cloud_iam_member" "cloud_IAM_admin_prod" {
   cloud_id = module.init.cloud_id #var.cloud_prod_id 
   role     = "iam.admin"
