@@ -12,10 +12,21 @@ resource "yandex_resourcemanager_folder_iam_member" "vpc_folder_admin_prod" {
 
 resource "yandex_resourcemanager_folder_iam_member" "folder_compute_admin_prod" {
   folder_id = module.init.folders[0].id 
-  roles     = {"compute.admin","compute.osLogin", "compute.operator"}
+  role     = "compute.admin"
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "folder_compute_osLogin_prod" {
+  folder_id = module.init.folders[0].id 
+  role     = "compute.osLogin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "folder_compute_operator_prod" {
+  folder_id = module.init.folders[0].id 
+  role     = "compute.operator"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
 
 resource "yandex_resourcemanager_cloud_iam_member" "vpc_user_prod" {
   cloud_id = module.init.cloud_id #var.cloud_prod_id 
