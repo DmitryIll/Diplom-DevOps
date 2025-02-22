@@ -37,15 +37,6 @@ resource "yandex_resourcemanager_folder_iam_member" "k8s_cluster_api_cluster_adm
 }
 
 
-resource "yandex_resourcemanager_folder_iam_member" "k8s_clusters_agent" {
-  folder_id = module.init.folders[0].id 
-  role     = "k8s.clusters.agent"
-  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
-}
 
-resource "yandex_resourcemanager_folder_iam_member" "k8s_clusters_agent" {
-  folder_id = module.init.folders[0].id 
-  role     = "k8s.clusters.agent"
-  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
-}
+
 
