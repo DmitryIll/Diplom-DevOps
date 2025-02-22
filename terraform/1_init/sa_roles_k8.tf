@@ -51,6 +51,12 @@ resource "yandex_resourcemanager_folder_iam_member" "k8s_cluster_api_cluster_adm
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "vpc-public-admin" {
+  # Сервисному аккаунту назначается роль "vpc.publicAdmin".
+  folder_id = module.init.folders[0].id 
+  role      = "vpc.publicAdmin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
 
 
 
