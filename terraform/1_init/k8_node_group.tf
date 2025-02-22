@@ -1,20 +1,20 @@
-# Создаем групп
+# Создаем группы нод кластера
 resource "yandex_kubernetes_node_group" "k8_node_a" {
-  cluster_id  = "${yandex_kubernetes_cluster.k8s-regional.id}"
-  name        = "worker-a"
-  description = "description"
-  version     = var.k8s_version
+  cluster_id  = "${yandex_kubernetes_cluster.k8s.id}"
+  name        = "node-a"
+  description = "node-a-k8s"
+  # version     = var.k8s_version
 
-  labels = {
-    "key" = "value"
-  }
+  # labels = {
+  #   "key" = "value"
+  # }
   instance_template {
     platform_id = "standard-v3"
-    name = "worker-a-{instance.short_id}"
+    name = "node-a-{instance.short_id}"
 
     network_interface {
       nat                = true
-      subnet_ids         = [yandex_vpc_subnet.mysubnet-a.id]
+      subnet_ids         = [yandex_vpc_subnet.prvate_a.id]
     }
     resources {
       memory = 2
@@ -22,7 +22,7 @@ resource "yandex_kubernetes_node_group" "k8_node_a" {
     }
     boot_disk {
       type = "network-hdd"
-      size = 40
+      size = 16
     }
     scheduling_policy {
       preemptible = true
@@ -39,6 +39,95 @@ resource "yandex_kubernetes_node_group" "k8_node_a" {
     }
   }
 }
+
+# -------------------------------------------------
+
+resource "yandex_kubernetes_node_group" "k8_node_b" {
+  cluster_id  = "${yandex_kubernetes_cluster.k8s.id}"
+  name        = "node-b"
+  description = "node-b-k8s"
+  # version     = var.k8s_version
+
+  # labels = {
+  #   "key" = "value"
+  # }
+  instance_template {
+    platform_id = "standard-v3"
+    name = "node-b-{instance.short_id}"
+
+    network_interface {
+      nat                = true
+      subnet_ids         = [yandex_vpc_subnet.prvate_b.id]
+    }
+    resources {
+      memory = 2
+      cores  = 2
+    }
+    boot_disk {
+      type = "network-hdd"
+      size = 16
+    }
+    scheduling_policy {
+      preemptible = true
+    }
+  }
+  scale_policy {
+    fixed_scale {
+      size = 1
+    }
+  }
+  allocation_policy {
+    location {
+      zone = "ru-central1-b"
+    }
+  }
+}
+
+resource "yandex_kubernetes_node_group" "k8_node_d" {
+  cluster_id  = "${yandex_kubernetes_cluster.k8s.id}"
+  name        = "node-d"
+  description = "node-d-k8s"
+  # version     = var.k8s_version
+
+  # labels = {
+  #   "key" = "value"
+  # }
+  instance_template {
+    platform_id = "standard-v3"
+    name = "node-d-{instance.short_id}"
+
+    network_interface {
+      nat                = true
+      subnet_ids         = [yandex_vpc_subnet.prvate_d.id]
+    }
+    resources {
+      memory = 2
+      cores  = 2
+    }
+    boot_disk {
+      type = "network-hdd"
+      size = 16
+    }
+    scheduling_policy {
+      preemptible = true
+    }
+  }
+  scale_policy {
+    fixed_scale {
+      size = 1
+    }
+  }
+  allocation_policy {
+    location {
+      zone = "ru-central1-d"
+    }
+  }
+}
+
+
+
+
+
 
 
 /*
