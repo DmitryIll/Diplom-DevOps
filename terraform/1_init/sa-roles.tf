@@ -138,3 +138,8 @@ resource "yandex_resourcemanager_folder_iam_member" "folder_vpc_user_prod" {
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "kms_admin" {
+  folder_id = module.init.folders[0].id 
+  role     = "kms.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}

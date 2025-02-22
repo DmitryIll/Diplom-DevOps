@@ -9,11 +9,6 @@ resource "yandex_kms_symmetric_key" "kms_key" {
   rotation_period   = "8760h"
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "kms_admin" {
-  folder_id = module.init.folders[0].id 
-  role     = "kms.admin"
-  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
-}
 
 resource "yandex_kms_symmetric_key_iam_binding" "k8_encrypter_decrypter" {
   symmetric_key_id = yandex_kms_symmetric_key.kms_key.id
