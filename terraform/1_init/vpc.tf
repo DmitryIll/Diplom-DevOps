@@ -12,23 +12,22 @@ resource "yandex_vpc_subnet" "public_a" {
   name           = "public-a"
   zone           = "ru-central1-a"
   v4_cidr_blocks = ["10.1.1.0/24"]
-  # network_id     = "${yandex_vpc_network.prod_net.id}"
   network_id     = yandex_vpc_network.prod_net.id
 }
 
-# resource "yandex_vpc_subnet" "public_b" {
-#   name           = "public-b"
-#   zone           = "ru-central1-b"
-#   v4_cidr_blocks = ["10.1.2.0/24"]
-#   network_id     = "${yandex_vpc_network.prod-net.id}"
-# }
+resource "yandex_vpc_subnet" "public_b" {
+  name           = "public-b"
+  zone           = "ru-central1-b"
+  v4_cidr_blocks = ["10.1.2.0/24"]
+  network_id     = yandex_vpc_network.prod_net.id
+}
 
-# resource "yandex_vpc_subnet" "public_d" {
-#   name           = "public-d"
-#   zone           = "ru-central1-d"
-#   v4_cidr_blocks = ["10.1.3.0/24"]
-#   network_id     = "${yandex_vpc_network.prod-net.id}"
-# }
+resource "yandex_vpc_subnet" "public_d" {
+  name           = "public-d"
+  zone           = "ru-central1-d"
+  v4_cidr_blocks = ["10.1.3.0/24"]
+  network_id     = yandex_vpc_network.prod_net.id
+}
 
 # -- таблица маршрутизации для приватныйх сетей ---
 
@@ -52,19 +51,19 @@ resource "yandex_vpc_subnet" "private_a" {
   route_table_id = yandex_vpc_route_table.rt_priv.id
 }
 
-# resource "yandex_vpc_subnet" "private_b" {
-#   name           = "private-b"
-#   zone           = "ru-central1-b"
-#   v4_cidr_blocks = ["10.2.2.0/24"]
-#   network_id     = "${yandex_vpc_network.prod_net.id}"
-#   route_table_id = yandex_vpc_route_table.rt_priv.id
-# }
+resource "yandex_vpc_subnet" "private_b" {
+  name           = "private-b"
+  zone           = "ru-central1-b"
+  v4_cidr_blocks = ["10.2.2.0/24"]
+  network_id     = "${yandex_vpc_network.prod_net.id}"
+  route_table_id = yandex_vpc_route_table.rt_priv.id
+}
 
-# resource "yandex_vpc_subnet" "private_d" {
-#   name           = "private-d"
-#   zone           = "ru-central1-d"
-#   v4_cidr_blocks = ["10.2.3.0/24"]
-#   network_id     = "${yandex_vpc_network.prod_net.id}"
-#   route_table_id = yandex_vpc_route_table.rt_priv.id
-# }
+resource "yandex_vpc_subnet" "private_d" {
+  name           = "private-d"
+  zone           = "ru-central1-d"
+  v4_cidr_blocks = ["10.2.3.0/24"]
+  network_id     = "${yandex_vpc_network.prod_net.id}"
+  route_table_id = yandex_vpc_route_table.rt_priv.id
+}
 
