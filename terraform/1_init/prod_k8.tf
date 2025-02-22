@@ -9,7 +9,7 @@ module "kube" {
   source = "git::https://github.com/DmitryIll/terraform-yc-kubernetes.git"
 
   cluster_name         = "kube-prod"
-  cluster_version      = "1.30"
+  cluster_version      = "1.28"
   description          = "prod_workload"
   folder_id            = local.folder_id #var.folder_id
   network_id           = yandex_vpc_network.prod_net.id  #module.net.vpc_id
@@ -18,9 +18,9 @@ module "kube" {
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
   master_locations     = [
-    {"subnet_id"      = yandex_vpc_subnet.public_a.id,
+    {"subnet_id"      = yandex_vpc_subnet.private_a.id,
     # "name"           = yandex_vpc_subnet.public_a.name,
-    "zone"           = yandex_vpc_subnet.public_a.zone
+    "zone"           = yandex_vpc_subnet.private_a.zone
     # "v4_cidr_blocks" = yandex_vpc_subnet.public_a.v4_cidr_blocks
     # "folder_id"      = yandex_vpc_subnet.public_a.folder_id
   }
