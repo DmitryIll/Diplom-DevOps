@@ -53,7 +53,7 @@ module "kube" {
       nat         = false
 
       fixed_scale = {
-        size = 1#2
+        size = 3
       }
     },
     # "yc-k8s-ng-02" = {
