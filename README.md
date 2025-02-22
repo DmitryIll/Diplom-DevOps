@@ -76,41 +76,13 @@
 
 #### Решение по созданию облачной инфраструктуры
 
-##### Создание организации d-ort в яндекс облаке
-
-Создал организацию "d-org" + создал платежный аккаунт.
-Для создания облаков использовал отдельный модуль терраформ - github: https://github.com/DmitryIll/terraform-yc-cloud .
-
-
-
-
-
-
-1. Подготовил и отладил код инициализирующего проекта, который:
-- создает сервисный аккаунт для работы terraforn
-- создает s3 баккет для хранения tfstate
-- создает YDB и табилцу в ней для реализации блокировки tfstae
-- далее мигрирую tfstate в S3.
-
-Код проекта инициализации см. в папке init_project.
-
-2. Применяею код:
-```
-trr init
-```
-
-![alt text](image.png)
-
-```
-trr apply
-```
-
-После создания access_key и secret_key и API к БД, правлю конфиг авторизации к БД.
-Далее перемещаю tfstate в s3 для этого раскоментирую блок backend "s3" в providers.tf и выполняю:
+1. Создал через терраформ (с рабочего ПК) отдельное облако "init" для инфраструктуры и создал сервисный аккаунт. Код создания облака в `terraform\1_init\` в файлах `main.tf` и `init.tf` . 
+2. Создал S3 хранилище и ydb и таблицу для обеспечения блокировки state файла и пернес туда state-файл терраформа. Код в `terraform\1_init\tf-state.tf` При этом сгенерил файл `terraform\1_init\backend.tf` который обеспечиват рабоботу с терраформ-state-bakend в S3. Перевел хранение стейт-файла терраформа в s3.
 
 ![alt text](image-1.png)
 
-Итого - создан сервисный аккаунт для работы terraform, создано S3 хранилище, создана БД YDB с таблицей блокировки - Dynamo DB Table, в S3 хранилище перемещен tfstate для иницилизирующего проекта.
+При этом освоил два разных варианта для помещения state файла в S3 - свой код и код через готовый модуль от яндекса.
+Некоторые скрины:
 
 ![alt text](image-2.png)
 
@@ -118,43 +90,33 @@ trr apply
 
 ![alt text](image-4.png)
 
+Но, в итоге решил использовать готовый модуль от яндекса - он мне понравился.
 
-VPC будут создавать уже в отдельном проекте.
+3. Создал в отдельном облаке "рабочую ВМ" и настроил на работу с облаком "init" через ранее созданный сервисный аккаунт и с хранением терраформ-бэкенда в S3 (код развертывания ВМ в `terraform\00_ВМ` ).
 
-Создал отдельный проект,  см. папку main_project.
+4. Создал VPC - см. файл `terraform\1_init\vpc.tf` При этом создал общую облачную сеть `prod_net` и создал подсети:
 
-Выполнил инициализацию:
+Три публичных подсети в трех зонах доступности:
+`public_a`
+`public_b`
+`public_d`
 
-![alt text](image-5.png)
+В публичной подсети в `зоне А` -  созадл ВМ c сервисом NAT - чтобы через нее подключаться из Интернет ко внутренним ВМ в приватных подсетях, и чтобы внутренние ВМ имели бы выход в Интернет. Код создания NAT ВМ см. в файле `terraform\1_init\nat.tf` .
 
-Для линукса пока не посчитались суммы:
+Создал таблицу маршрутизации `yandex_vpc_route_table.rt_priv"` - для перенаправления трафика из приватных ВМ в Интернет. Код в файле `terraform\1_init\vpc.tf`.
 
-![alt text](image-6.png)
+Cоздал три подсети приватных - для кластера k8s:
+`private_a`
+`private_b`
+`private_d`
 
-Настроил через yc работу с сервисным аккаунтом sa-trr (настроил профиль).
-В коде providers.tf указал использовать авторизационные ключи для sa-trr.
-Подготовит тестовый код создания VPC, применил - не хватает прав для sa-trr, для этого добавляю прав для sa-trr в первом init_project.
+Из Интернет прямого доступа в подсети приватные не будет.
+При этом для этих подсетей настроил маршрутизацию трафика исходящего в Интернет (для скачки атефактов и пр.).
+Кластер k8s будет в защищенной сети без прямого доступа из Интернет для безопасности.
 
-Применил код добавил роль:
+Необходимые роли для работы сервисного аккаунта задаю в файлах:
 
-![alt text](image-7.png)
-
-Еще добавил роль:
-
-![alt text](image-8.png)
-
-
-После чего прав хватило для тестового добавления vpc и вм c nat:
-
-![alt text](image-9.png)
-
-Теперь выполняю тестовый дестрой:
-
-![alt text](image-10.png)
-
-Все ок.
-
-
+`terraform\1_init\sa-roles.tf` 
 
 ---
 ### Создание Kubernetes кластера
@@ -184,16 +146,69 @@ VPC будут создавать уже в отдельном проекте.
 
 #### Решение по созданию кластера Kubernetis
 
-Создал код в init_project и добавил роли для сервисного аккаунта:
+Роли необходимые для работы сервисного аккаунта для кубернетис задают тут:
+`terraform\1_init\sa_roles_k8.tf` 
 
-k8s.clusters.agent 
-vpc.publicAdmin
-container-registry.images.puller
+В файле `terraform\1_init\kms.tf` создаю симметричный ключ шифрования и даю права для сервисного аккаунта.
 
+Cоздаю региональный кластер k8s и группу доступности (региональную) из серверов в трех разных зонах доступности - код в файле `terraform\1_init\prod_k8.tf`.
+
+Получаю конфиг для подключения (на NAT ВМ):
+
+```
+yc managed-kubernetes cluster get-credentials --id cativiuqgc4ugdev229m --internal
+```
+
+`
+root@nat:~# yc managed-kubernetes cluster get-credentials --id cativiuqgc4ugdev229m --internal
+
+Context 'yc-kube-prod-h37xb2gt' was added as default to kubeconfig '/root/.kube/config'.
+Check connection to cluster using 'kubectl cluster-info --kubeconfig /root/.kube/config'.
+
+Note, that authentication depends on 'yc' and its config profile 'sa-tf'.
+To access clusters using the Kubernetes API, please use Kubernetes Service Account.
+`
+Конфиг:
+
+![alt text](image-21.png)
+
+
+В итоге получил созданную инфраструктру:
+
+![alt text](image.png)
+
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
+![alt text](image-10.png)
 
 ![alt text](image-11.png)
 
 ![alt text](image-12.png)
+
+![alt text](image-13.png)
+
+![alt text](image-14.png)
+
+![alt text](image-15.png)
+
+![alt text](image-16.png)
+
+![alt text](image-17.png)
+
+![alt text](image-18.png)
+
+![alt text](image-19.png)
+
+![alt text](image-20.png)
+
 
 ---
 ### Создание тестового приложения
