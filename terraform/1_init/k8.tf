@@ -2,8 +2,8 @@ resource "yandex_kubernetes_cluster" "k8s-zonal" {
   name = "k8-prod"
   network_id = yandex_vpc_network.prod_net.id
   network_policy_provider = "CALICO"
-  version = var.k8s_ver
-  public_ip = true
+#   version = var.k8s_ver
+#   public_ip = true
   master {
     master_location {
       zone      = yandex_vpc_subnet.private_a.zone
