@@ -1,16 +1,31 @@
-resource "yandex_kubernetes_cluster" "k8s-zonal" {
+resource "yandex_kubernetes_cluster" "k8s" {
   name = "k8-prod"
   network_id = yandex_vpc_network.prod_net.id
   network_policy_provider = "CALICO"
-#   version = var.k8s_ver
-#   public_ip = true
+  version = var.k8s_ver
+  public_ip = true
   master {
     master_location {
       zone      = yandex_vpc_subnet.private_a.zone
       subnet_id = yandex_vpc_subnet.private_a.id
     }
+    master_location {
+      zone      = yandex_vpc_subnet.private_b.zone
+      subnet_id = yandex_vpc_subnet.private_b.id
+    }
+    master_location {
+      zone      = yandex_vpc_subnet.private_d.zone
+      subnet_id = yandex_vpc_subnet.private_d.id
+    }
     security_group_ids = [yandex_vpc_security_group.k8s-public-services.id]
   }
+  # master {
+  #   master_location {
+  #     zone      = yandex_vpc_subnet.private_a.zone
+  #     subnet_id = yandex_vpc_subnet.private_a.id
+  #   }
+  #   security_group_ids = [yandex_vpc_security_group.k8s-public-services.id]
+  # }
   service_account_id      = yandex_iam_service_account.sa_tf.id
   node_service_account_id = yandex_iam_service_account.sa_tf.id
 
