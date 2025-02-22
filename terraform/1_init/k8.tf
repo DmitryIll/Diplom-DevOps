@@ -14,7 +14,7 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
   node_service_account_id = yandex_iam_service_account.sa_tf.id
 
   depends_on = [
-     yandex_resourcemanager_folder_iam_member.folder_resource_manager_admin_prod,
+     yandex_resourcemanager_folder_iam_member.editor,
      yandex_resourcemanager_folder_iam_member.container-registry_images_puller
    ]
 

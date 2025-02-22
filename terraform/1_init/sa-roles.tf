@@ -1,5 +1,12 @@
 # folders
 
+resource "yandex_resourcemanager_folder_iam_member" "editor" {
+ # Сервисному аккаунту назначается роль "editor".
+ folder_id = module.init.folders[0].id 
+ role      = "editor"
+ member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
 resource "yandex_resourcemanager_folder_iam_member" "vpc_folder_admin_prod" {
   folder_id = module.init.folders[0].id 
   role     = "vpc.admin"
