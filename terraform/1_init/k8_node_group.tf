@@ -14,7 +14,7 @@ resource "yandex_kubernetes_node_group" "k8_node_a" {
 
     network_interface {
       nat                = true
-      subnet_ids         = [yandex_vpc_subnet.prvate_a.id]
+      subnet_ids         = [yandex_vpc_subnet.private_a.id]
     }
     resources {
       memory = 2
@@ -57,7 +57,7 @@ resource "yandex_kubernetes_node_group" "k8_node_b" {
 
     network_interface {
       nat                = true
-      subnet_ids         = [yandex_vpc_subnet.prvate_b.id]
+      subnet_ids         = [yandex_vpc_subnet.private_b.id]
     }
     resources {
       memory = 2
@@ -98,7 +98,7 @@ resource "yandex_kubernetes_node_group" "k8_node_d" {
 
     network_interface {
       nat                = true
-      subnet_ids         = [yandex_vpc_subnet.prvate_d.id]
+      subnet_ids         = [yandex_vpc_subnet.private_d.id]
     }
     resources {
       memory = 2
