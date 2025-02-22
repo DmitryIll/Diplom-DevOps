@@ -12,7 +12,6 @@
 #   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 # }
 
-
 resource "yandex_resourcemanager_folder_iam_member" "container-registry_images_puller" {
   folder_id = module.init.folders[0].id 
   role     = "container-registry.images.puller"

@@ -26,3 +26,8 @@ variable "root_organization_admins" {
   type        = list(string)
 }
 
+variable "k8s_ver" {
+  description = "Версия k8s"
+  type        = string
+  default     = "1.30"
+}
