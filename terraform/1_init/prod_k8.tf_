@@ -30,7 +30,6 @@ module "kube" {
       "subnet_id"      = yandex_vpc_subnet.private_d.id,
       "zone"           = yandex_vpc_subnet.private_d.zone
     }
-
   ]
   #  тут менял:
   use_existing_sa      = true
