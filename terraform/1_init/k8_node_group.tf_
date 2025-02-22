@@ -17,12 +17,12 @@ resource "yandex_kubernetes_node_group" "k8_node_a" {
       subnet_ids         = [yandex_vpc_subnet.private_a.id]
     }
     resources {
-      memory = 2
-      cores  = 2
+      memory = 4
+      cores  = 4
     }
     boot_disk {
       type = "network-hdd"
-      size = 16
+      size = 64
     }
     scheduling_policy {
       preemptible = true
@@ -60,12 +60,12 @@ resource "yandex_kubernetes_node_group" "k8_node_b" {
       subnet_ids         = [yandex_vpc_subnet.private_b.id]
     }
     resources {
-      memory = 2
-      cores  = 2
+      memory = 4
+      cores  = 4
     }
     boot_disk {
       type = "network-hdd"
-      size = 16
+      size = 64
     }
     scheduling_policy {
       preemptible = true
@@ -101,12 +101,12 @@ resource "yandex_kubernetes_node_group" "k8_node_d" {
       subnet_ids         = [yandex_vpc_subnet.private_d.id]
     }
     resources {
-      memory = 2
-      cores  = 2
+      memory = 4
+      cores  = 4
     }
     boot_disk {
       type = "network-hdd"
-      size = 16
+      size = 64
     }
     scheduling_policy {
       preemptible = true
