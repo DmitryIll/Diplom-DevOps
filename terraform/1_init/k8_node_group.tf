@@ -203,3 +203,5 @@ resource "yandex_kubernetes_node_group" "<имя_группы_узлов>" {
     }
   }
 }
+
+*/
