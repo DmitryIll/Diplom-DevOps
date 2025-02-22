@@ -18,41 +18,6 @@ resource "yandex_iam_service_account" "sa_tf" {
   folder_id   = local.folder_id
 }
 
-# Grant the service account the organization-manager.admin role
-resource "yandex_organizationmanager_organization_iam_binding" "org_admin_for_sa_tf" {
-  organization_id = var.organization_id
-  role            = "organization-manager.admin"
-  members = [
-    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
-  ]
-}
-
-# Grant the service account the billing.accounts.editor role
-resource "yandex_organizationmanager_organization_iam_binding" "biling_editor_for_sa_tf" {
-  organization_id = var.organization_id
-  role            = "billing.accounts.editor"
-  members = [
-    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
-  ]
-}
-
-# Grant the service account the resource-manager.admin role
-resource "yandex_organizationmanager_organization_iam_binding" "resource_manager_admin_for_sa_tf" {
-  organization_id = var.organization_id
-  role            = "resource-manager.admin"
-  members = [
-    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
-  ]
-}
-
-# Grant the service account the iam.admin role
-resource "yandex_organizationmanager_organization_iam_binding" "iam_admin_for_sa_tf" {
-  organization_id = var.organization_id
-  role            = "iam.admin"
-  members = [
-    "serviceAccount:${yandex_iam_service_account.sa_tf.id}",
-  ]
-}
 
 # Create an authorized access key for the service account
 resource "yandex_iam_service_account_key" "sa_auth_key" {
@@ -75,7 +40,6 @@ resource "local_file" "key" {
   EOH
   filename = ".key.json"
 }
-
 
 output "init_service_account_id" {
   description = "init service account ID"
