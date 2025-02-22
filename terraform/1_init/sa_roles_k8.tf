@@ -12,6 +12,21 @@
 #   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 # }
 
+
+resource "yandex_resourcemanager_folder_iam_member" "container-registry_images_puller" {
+  folder_id = module.init.folders[0].id 
+  role     = "container-registry.images.puller"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+
+resource "yandex_resourcemanager_folder_iam_member" "load_balancer_admin" {
+  folder_id = module.init.folders[0].id 
+  role     = "load-balancer.admin"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
+
 resource "yandex_resourcemanager_folder_iam_member" "k8s_tunnelClusters_agent" {
   folder_id = module.init.folders[0].id 
   role     = "k8s.tunnelClusters.agent"
