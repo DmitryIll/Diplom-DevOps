@@ -17,14 +17,14 @@ module "kube" {
   enable_cilium_policy = true
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
-  master_locations     = {
-    "subnet_id"      = yandex_vpc_subnet.public_a.id,
-    "name"           = yandex_vpc_subnet.public_a.name,
+  master_locations     = [
+    {"subnet_id"      = yandex_vpc_subnet.public_a.id,
+    # "name"           = yandex_vpc_subnet.public_a.name,
     "zone"           = yandex_vpc_subnet.public_a.zone
-    "v4_cidr_blocks" = yandex_vpc_subnet.public_a.v4_cidr_blocks
-    "folder_id"      = yandex_vpc_subnet.public_a.folder_id
+    # "v4_cidr_blocks" = yandex_vpc_subnet.public_a.v4_cidr_blocks
+    # "folder_id"      = yandex_vpc_subnet.public_a.folder_id
   }
-
+  ]
   #  тут менял:
   use_existing_sa      = true
   master_service_account_id = yandex_iam_service_account.sa_tf.id 
