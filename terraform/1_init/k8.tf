@@ -8,16 +8,16 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
     regional {
       region = "ru-central1"
       location {
-        zone      = yandex_vpc_subnet.prv_a.zone
-        subnet_id = yandex_vpc_subnet.priv_a.id
+        zone      = yandex_vpc_subnet.private_a.zone
+        subnet_id = yandex_vpc_subnet.private_a.id
       }
     #   location {
-    #     zone      = yandex_vpc_subnet.prv_b.zone
-    #     subnet_id = yandex_vpc_subnet.prv_b.id
+    #     zone      = yandex_vpc_subnet.prvate_b.zone
+    #     subnet_id = yandex_vpc_subnet.prvate_b.id
     #   }
     #   location {
-    #     zone      = yandex_vpc_subnet.prv_d.zone
-    #     subnet_id = yandex_vpc_subnet.prv_d.id
+    #     zone      = yandex_vpc_subnet.prvate_d.zone
+    #     subnet_id = yandex_vpc_subnet.prvate_d.id
     #   }
     }
   }
