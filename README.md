@@ -172,6 +172,18 @@ To access clusters using the Kubernetes API, please use Kubernetes Service Accou
 
 ![alt text](image-21.png)
 
+Проверяю работу с кластером через kubectl:
+
+```
+kubectl cluster-info --kubeconfig /root/.kube/config
+```
+![alt text](image-22.png)
+
+```
+kubectl get nodes
+```
+![alt text](image-23.png)
+
 
 В итоге получил созданную инфраструктру:
 
