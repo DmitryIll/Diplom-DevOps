@@ -48,7 +48,7 @@ module "kube" {
 
   node_groups = {
     "yc-k8s-ng-01" = {
-      version     = "1.30"
+      version     = "1.28"
       description = "demo_workload"
       nat         = false
 
