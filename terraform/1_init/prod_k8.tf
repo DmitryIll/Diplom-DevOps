@@ -13,7 +13,7 @@ module "kube" {
   description          = "prod_workload"
   folder_id            = local.folder_id #var.folder_id
   network_id           = yandex_vpc_network.prod_net.id  #module.net.vpc_id
-  public_access        = true
+  public_access        = false
   enable_cilium_policy = true
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
