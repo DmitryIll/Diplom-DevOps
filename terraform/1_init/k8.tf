@@ -5,7 +5,8 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
   master {
     version = var.k8s_ver
     public_ip = true
-    regional {
+    # regional {
+    zonal {
       region = "ru-central1"
       location {
         zone      = yandex_vpc_subnet.private_a.zone
