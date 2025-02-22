@@ -18,12 +18,19 @@ module "kube" {
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
   master_locations     = [
-    {"subnet_id"      = yandex_vpc_subnet.private_a.id,
-    # "name"           = yandex_vpc_subnet.public_a.name,
-    "zone"           = yandex_vpc_subnet.private_a.zone
-    # "v4_cidr_blocks" = yandex_vpc_subnet.public_a.v4_cidr_blocks
-    # "folder_id"      = yandex_vpc_subnet.public_a.folder_id
-  }
+    {
+      "subnet_id"      = yandex_vpc_subnet.private_a.id,
+      "zone"           = yandex_vpc_subnet.private_a.zone
+    },
+    {
+      "subnet_id"      = yandex_vpc_subnet.private_b.id,
+      "zone"           = yandex_vpc_subnet.private_b.zone
+    },
+    {
+      "subnet_id"      = yandex_vpc_subnet.private_d.id,
+      "zone"           = yandex_vpc_subnet.private_d.zone
+    }
+
   ]
   #  тут менял:
   use_existing_sa      = true
