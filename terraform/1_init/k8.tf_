@@ -26,7 +26,7 @@ resource "yandex_kubernetes_cluster" "k8s-zonal" {
 }
 
 # -----------
-
+#  https://yandex.cloud/ru/docs/managed-kubernetes/operations/kubernetes-cluster/kubernetes-cluster-create
 
 # resource "yandex_kubernetes_cluster" "k8s-zonal" {
 #   name = "k8s-zonal"
@@ -100,4 +100,37 @@ resource "yandex_kubernetes_cluster" "k8s-zonal" {
 #   name              = "kms-key"
 #   default_algorithm = "AES_128"
 #   rotation_period   = "8760h" # 1 год.
+# }
+
+# ----------------------
+
+# resource "yandex_kubernetes_cluster" "k8s-regional" {
+#   name = "k8s-regional"
+#   network_id = yandex_vpc_network.my-regional-net.id
+#   master {
+#     master_location {
+#       zone      = yandex_vpc_subnet.mysubnet-a.zone
+#       subnet_id = yandex_vpc_subnet.mysubnet-a.id
+#     }
+#     master_location {
+#       zone      = yandex_vpc_subnet.mysubnet-b.zone
+#       subnet_id = yandex_vpc_subnet.mysubnet-b.id
+#     }
+#     master_location {
+#       zone      = yandex_vpc_subnet.mysubnet-d.zone
+#       subnet_id = yandex_vpc_subnet.mysubnet-d.id
+#     }
+#     security_group_ids = [yandex_vpc_security_group.regional-k8s-sg.id]
+#   }
+#   service_account_id      = yandex_iam_service_account.my-regional-account.id
+#   node_service_account_id = yandex_iam_service_account.my-regional-account.id
+#   depends_on = [
+#     yandex_resourcemanager_folder_iam_member.k8s-clusters-agent,
+#     yandex_resourcemanager_folder_iam_member.vpc-public-admin,
+#     yandex_resourcemanager_folder_iam_member.images-puller,
+#     yandex_resourcemanager_folder_iam_member.encrypterDecrypter
+#   ]
+#   kms_provider {
+#     key_id = yandex_kms_symmetric_key.kms-key.id
+#   }
 # }
