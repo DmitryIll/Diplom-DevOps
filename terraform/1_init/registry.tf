@@ -13,6 +13,7 @@ resource "yandex_container_registry_iam_binding" "имя_реестра" {
   members = [
     "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
   ]
+  depends_on = [yandex_resourcemanager_cloud_iam_member.cloud-registry_editor]
 }
 
 # resource "yandex_container_registry_iam_binding" "puller" {

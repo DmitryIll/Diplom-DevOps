@@ -112,6 +112,12 @@ resource "yandex_resourcemanager_cloud_iam_member" "vpc_privateAdmin_prod" {
   member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
 }
 
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-registry_editor" {
+  cloud_id = module.init.cloud_id #var.cloud_prod_id 
+  role     = "cloud-registry.editor"
+  member = "serviceAccount:${yandex_iam_service_account.sa_tf.id}"
+}
+
 # ---- На уровне организации ----
 
 # Grant the service account the organization-manager.admin role
