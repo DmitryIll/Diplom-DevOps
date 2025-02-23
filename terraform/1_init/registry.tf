@@ -6,6 +6,8 @@ resource "yandex_container_registry" "reg" {
 #   }
 }
 
+# id crp89b913h17litceuqc
+
 output "yandex_container_registry_reg_id" {
   value       = yandex_container_registry.reg.id
 }
@@ -92,6 +94,13 @@ output "yandex_container_registry_reg_id" {
 #     "serviceAccount:<идентификатор_сервисного_аккаунта>",
 #   ]
 # }
+
+# ---- yc ----
+
+# yc container registry configure-docker
+# docker pull cr.yandex/<идентификатор_реестра>/ubuntu:hello
+
+
 
 # https://yandex.cloud/ru/docs/container-registry/operations/authentication#iam-token_1
 # container-registry.images.puller
