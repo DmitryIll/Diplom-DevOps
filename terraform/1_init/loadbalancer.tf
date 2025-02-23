@@ -32,7 +32,7 @@ resource "yandex_lb_target_group" "lb_group" {
 
   target {
     subnet_id = yandex_vpc_subnet.private_a.id
-    address   = 10.2.1.22
+    address   = "10.2.1.22"
   }
 }
 
