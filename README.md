@@ -241,6 +241,59 @@ kubectl get nodes
 2. Регистри с собранным docker image. В качестве регистри может быть DockerHub или [Yandex Container Registry](https://cloud.yandex.ru/services/container-registry), 
 созданный также с помощью terraform.
 
+#### Решение по созданию тестового приложения
+
+* создал регистри для хранения docker images в яндекс облаке - см. файл `terraform\1_init\registry.tf`
+* Создал репозиторий `https://github.com/DmitryIll/test-app.git` и в него поместил статичные файлы сайта и файл docker compose.
+* тестирую приложение пока в докер контейнере:
+```
+docker build -t site:1.0 .
+docker run -p 80:80 site:1.0
+```
+Сайт работает:
+
+![alt text](image-24.png)
+
+Пробую пока вручную загрузить образ в регистри:
+
+```
+
+Один из вариантов:
+
+```
+echo $IAM_TOKEN | docker login   --username iam   --password-stdin   cr.yandex
+```
+
+Другой вариант:
+
+```
+yc container registry configure-docker
+```
+
+Пушу образ в регистри:
+
+```
+docker tag site:1.0 cr.yandex/crp89b913h17litceuqc/site:1.0
+docker push cr.yandex/crp89b913h17litceuqc/site:1.0
+```
+
+![alt text](image-25.png)
+
+Удаляю локально все docker images с ВМ:
+
+```
+docker image rm 29cda006b448 --force
+```
+
+![alt text](image-26.png)
+
+Пробую загрузить из регистри - проверяю:
+Образ появился:
+
+![alt text](image-27.png)
+
+Т.е. регистри работает ок.
+
 ---
 ### Подготовка cистемы мониторинга и деплой приложения
 
