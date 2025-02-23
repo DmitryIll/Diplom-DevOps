@@ -12,6 +12,18 @@ output "yandex_container_registry_reg_id" {
   value       = yandex_container_registry.reg.id
 }
 
+# ---- yc ----
+
+# yc container registry configure-docker
+
+
+# docker pull cr.yandex/<идентификатор_реестра>/ubuntu:hello
+# docker push cr.yandex/<идентификатор_реестра>/<имя_Docker-образа>
+# yc container image list --repository-name=<идентификатор_реестра>/<имя_Docker-образа>
+# yc container registry list-access-bindings <имя_или_идентификатор_реестра>
+# yc container repository list-access-bindings <имя_или_идентификатор_репозитория>
+
+
 # resource "yandex_container_registry_iam_binding" "имя_реестра" {
 #   registry_id = yandex_container_registry.reg.id
 #   role        = "container-registry.editor"
@@ -95,10 +107,6 @@ output "yandex_container_registry_reg_id" {
 #   ]
 # }
 
-# ---- yc ----
-
-# yc container registry configure-docker
-# docker pull cr.yandex/<идентификатор_реестра>/ubuntu:hello
 
 
 
@@ -122,12 +130,7 @@ output "yandex_container_registry_reg_id" {
 # "cr.yandex": "yc"
 
 
-# docker push cr.yandex/<идентификатор_реестра>/<имя_Docker-образа>
 
-# yc container image list --repository-name=<идентификатор_реестра>/<имя_Docker-образа>
-
-# yc container registry list-access-bindings <имя_или_идентификатор_реестра>
-# yc container repository list-access-bindings <имя_или_идентификатор_репозитория>
 
 
 # Обратиться к определенной версии Docker-образа можно одним из способов:
