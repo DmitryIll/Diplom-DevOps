@@ -6,6 +6,10 @@ resource "yandex_container_registry" "reg" {
 #   }
 }
 
+output "yandex_container_registry_reg_id" {
+  value       = yandex_container_registry.reg.id
+}
+
 # resource "yandex_container_registry_iam_binding" "имя_реестра" {
 #   registry_id = yandex_container_registry.reg.id
 #   role        = "container-registry.editor"
@@ -41,6 +45,26 @@ resource "yandex_container_registry" "reg" {
 # container-registry.images.puller
 # container-registry.images.scanner
 
+//
+// Create a new Container Repository and new IAM Binding for it.
+//
+# resource "yandex_container_registry" "your-registry" {
+#   folder_id = "your-folder-id"
+#   name      = "registry-name"
+# }
+
+# resource "yandex_container_repository" "repo-1" {
+#   name = "${yandex_container_registry.your-registry.id}/repo-1"
+# }
+
+# resource "yandex_container_repository_iam_binding" "puller" {
+#   repository_id = yandex_container_repository.repo-1.id
+#   role          = "container-registry.images.puller"
+
+#   members = [
+#     "system:allUsers",
+#   ]
+# }
 
 # resource "yandex_container_registry_ip_permission" "my_ip_permission" {
 #   registry_id = yandex_container_registry.my_registry.id
@@ -97,36 +121,20 @@ resource "yandex_container_registry" "reg" {
 # yc container repository list-access-bindings <имя_или_идентификатор_репозитория>
 
 
-
-
-
-
-
-
-
 # Обратиться к определенной версии Docker-образа можно одним из способов:
 
 #     <реестр>/<имя_образа>:<тег>;
 #     <реестр>/<имя_образа>@<хеш>.
 
 
-//
-// Create a new Container Repository and new IAM Binding for it.
-//
-# resource "yandex_container_registry" "your-registry" {
-#   folder_id = "your-folder-id"
-#   name      = "registry-name"
-# }
+# yc container registry create --name test
+# yc container registry configure-docker
 
-# resource "yandex_container_repository" "repo-1" {
-#   name = "${yandex_container_registry.your-registry.id}/repo-1"
-# }
+# docker tag myapp cr.yandex/crp5gbscd8f2re1ga8ip/myapp:latest
+# docker push cr.yandex/crp5gbscd8f2re1ga8ip/myapp
 
-# resource "yandex_container_repository_iam_binding" "puller" {
-#   repository_id = yandex_container_repository.repo-1.id
-#   role          = "container-registry.images.puller"
+# yc container image list --repository-name=crp5gbscd8f2re1ga8ip/myapp
+# yc container image scan crprcak0gm7fn41j9ik2
 
-#   members = [
-#     "system:allUsers",
-#   ]
-# }
+# yc container image list-vulnerabilities --scan-result-id=chekusor1mibehitcpu6
+# https://yandex.cloud/ru/docs/container-registry/operations/scanning-docker-image
