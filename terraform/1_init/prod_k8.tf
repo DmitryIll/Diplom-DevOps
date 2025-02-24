@@ -34,7 +34,7 @@ module "kube" {
       "rule3" = {
         protocol = "TCP"
         description = "rule-3"
-        predefined_target = "self_security_group"
+        # predefined_target = "self_security_group"
         from_port         = 0
         to_port           = 65535
       }
