@@ -17,7 +17,7 @@ resource "yandex_kubernetes_node_group" "k8_node_a" {
       subnet_ids         = [yandex_vpc_subnet.private_a.id]
     }
     resources {
-      memory = 4
+      memory = 8
       cores  = 4
     }
     boot_disk {
@@ -60,7 +60,7 @@ resource "yandex_kubernetes_node_group" "k8_node_b" {
       subnet_ids         = [yandex_vpc_subnet.private_b.id]
     }
     resources {
-      memory = 4
+      memory = 8
       cores  = 4
     }
     boot_disk {
@@ -101,7 +101,7 @@ resource "yandex_kubernetes_node_group" "k8_node_d" {
       subnet_ids         = [yandex_vpc_subnet.private_d.id]
     }
     resources {
-      memory = 4
+      memory = 8
       cores  = 4
     }
     boot_disk {
