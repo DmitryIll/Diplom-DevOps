@@ -81,20 +81,20 @@ module "kube" {
   master_service_account_id = yandex_iam_service_account.sa_tf.id 
   node_service_account_id =  yandex_iam_service_account.sa_tf.id
 
-  node_groups_defaults = {
-    template_name = "{instance_group.id}-{instance.short_id}"
-    platform_id   = "standard-v3"
-    node_cores    = 2
-    node_memory   = 4
-    node_gpus     = 0
-    core_fraction = 20
-    disk_type     = "network-ssd"
-    disk_size     = 32
-    preemptible   = true
-    nat           = false
-    ipv4          = true
-    ipv6          = false
-  }
+  # node_groups_defaults = {
+  #   template_name = "{instance_group.id}-{instance.short_id}"
+  #   platform_id   = "standard-v3"
+  #   node_cores    = 2
+  #   node_memory   = 4
+  #   node_gpus     = 0
+  #   core_fraction = 20
+  #   disk_type     = "network-ssd"
+  #   disk_size     = 32
+  #   preemptible   = true
+  #   nat           = false
+  #   ipv4          = true
+  #   ipv6          = false
+  # }
 # конец изменениям
 
   node_groups = {
