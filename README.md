@@ -388,6 +388,46 @@ https://mon.dmil.ru
 2. При любом коммите в репозиторие с тестовым приложением происходит сборка и отправка в регистр Docker образа.
 3. При создании тега (например, v1.0.0) происходит сборка и отправка с соответствующим label в регистри, а также деплой соответствующего Docker образа в кластер Kubernetes.
 
+#### Решение по установке и настройке CI/CD
+
+Использовать gitlab.com не получилось, т.к. там что бы запустить pipline нужно авторизоваться по номеру телефону не российскому.
+Поставил свой gitlab на отдельной ВМ.
+Развернул прикрутиел к нему свой домен git.dmil.ru  - gitlab заработал (на самоподписном сертификате для https), но, не удается зарегистрировать раннер:
+
+![alt text](image-31.png)
+
+```
+root@git-lab:/etc/gitlab# docker run -ti --rm --name gitlab-runner       --network host       -v /srv/gitlab-runner/config:/etc/gitlab-runner       -v /var/run/docker.sock:/var/run/docker.sock    gitlab/gitlab-runner:latest    register
+Runtime platform                                    arch=amd64 os=linux pid=7 revision=c4cbe9dd version=17.9.0
+Running in system-mode.
+
+Enter the GitLab instance URL (for example, https://gitlab.com/):
+https://git.dmil.ru/
+Enter the registration token:
+GR1348941ifC3VE8Ep_3Rs1KmfQ2G
+Enter a description for the runner:
+[git-lab]:
+Enter tags for the runner (comma-separated):
+
+Enter optional maintenance note for the runner:
+
+WARNING: Support for registration tokens and runner parameters in the 'register' command has been deprecated in GitLab Runner 15.6 and will be replaced with support for authentication tokens. For more information, see https://docs.gitlab.com/ee/ci/runners/new_creation_workflow
+ERROR: Registering runner... failed                 runner=GR1348941ifC3VE8E status=couldn't execute POST against https://git.dmil.ru/api/v4/runners: Post "https://git.dmil.ru/api/v4/runners": tls: failed to verify certificate: x509: certificate relies on legacy Common Name field, use SANs instead
+PANIC: Failed to register the runner.
+root@git-lab:/etc/gitlab#
+```
+
+Пока не понял что можно сделать. Ранее таких проблем не было.
+Поискал в интернте пока не нашел решения.
+Думаю попробовать еще раз развернуть gilab но, по http.
+
+Еще пробовал заказать управляемый сервис gitlab в яндекс облаке, но, там ошибка - имя сервиса не удается ввести - ошибка в GUI. Отослал запрос в поддержку яндекса.
+
+Буду пробовать дальше разбираться и искать решение.
+
+
+
+
 ---
 ## Что необходимо для сдачи задания?
 
