@@ -13,8 +13,34 @@ module "kube" {
   description          = "prod_workload"
   folder_id            = local.folder_id #var.folder_id
   network_id           = yandex_vpc_network.prod_net.id  #module.net.vpc_id
-  public_access        = false
-  enable_cilium_policy = false
+  public_access        = true
+  security_groups_ids_list = yandex_vpc_security_group.k8s-public-services.id
+
+  custom_ingress_rules = {
+      "rule1" = {
+        protocol = "TCP"
+        description = "rule-1"
+        v4_cidr_blocks = ["0.0.0.0/0"]
+        # from_port = 3000
+        from_port = 0
+        to_port = 32767
+      },
+      "rule2" = {
+        protocol = "TCP"
+        description = "rule-2"
+        v4_cidr_blocks = ["0.0.0.0/0"]
+        port = 443
+      },
+      "rule3" = {
+        protocol = "TCP"
+        description = "rule-3"
+        predefined_target = "self_security_group"
+        from_port         = 0
+        to_port           = 65535
+      }
+    }
+
+  enable_cilium_policy = true
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
   master_locations     = [
