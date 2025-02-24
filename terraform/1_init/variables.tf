@@ -35,5 +35,6 @@ variable "root_organization_admins" {
 
 variable "path_to_kubconfig" {
   type = string
-  default = "/tmp/config"
+  # default = "/tmp/config"
+  default = "~/.kube/config"
 }
