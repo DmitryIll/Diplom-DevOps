@@ -13,9 +13,9 @@ resource "helm_release" "kube_prometheus_stack" {
   create_namespace = true
   namespace = "kube-monitoring"
   values = ["${file("./values/chart-monitoring.yaml")}"]
-  depends_on = [
-    yandex_kubernetes_node_group.node_group
-  ]
+#   depends_on = [
+#     yandex_kubernetes_node_group.node_group
+#   ]
 }
 
 resource "helm_release" "ingress-nginx" {
