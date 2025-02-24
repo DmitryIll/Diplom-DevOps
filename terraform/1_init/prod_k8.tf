@@ -58,8 +58,8 @@ module "kube" {
     }
 
 
-  # enable_cilium_policy = true
-  enable_cilium_policy = false
+  enable_cilium_policy = true
+  # enable_cilium_policy = false
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
   master_locations     = [
