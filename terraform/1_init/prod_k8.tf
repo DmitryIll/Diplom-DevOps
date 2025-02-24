@@ -31,13 +31,13 @@ module "kube" {
         v4_cidr_blocks = ["0.0.0.0/0"]
         port = 443
       },
-      "rule3" = {
-        protocol = "TCP"
-        description = "rule-3"
-        # predefined_target = "self_security_group"
-        from_port         = 0
-        to_port           = 65535
-      }
+      # "rule3" = {
+      #   protocol = "TCP"
+      #   description = "rule-3"
+      #   # predefined_target = "self_security_group"
+      #   from_port         = 0
+      #   to_port           = 65535
+      # }
     }
 
   enable_cilium_policy = true
