@@ -113,47 +113,47 @@ EOF
 }
 
 # Instructions regarding how to migrate to remote Terraform state
-output "backend_tf_textnote" {
-  value = <<EOF
-***************
-To migrate to remote Terraform state follow this steps:
-1. From the output `backend_tf` copy all text between EOH tags and paste into new `backend.tf` file.
-2. Initialize environment variables from `.env` file (`source ./.env`).
-3. Run `terraform init -migrate-state` to migrate to remote state.
+# output "backend_tf_textnote" {
+#   value = <<EOF
+# ***************
+# To migrate to remote Terraform state follow this steps:
+# 1. From the output `backend_tf` copy all text between EOH tags and paste into new `backend.tf` file.
+# 2. Initialize environment variables from `.env` file (`source ./.env`).
+# 3. Run `terraform init -migrate-state` to migrate to remote state.
 
-Optionally:
-- to create and configure new YC profile for service account `${yandex_iam_service_account.sa_tf.name}` execute:
-  ./.create-profile-${yandex_iam_service_account.sa_tf.name}.sh
-  source ./.activate-profile-${yandex_iam_service_account.sa_tf.name}.sh
-***************
-EOF
-}
+# Optionally:
+# - to create and configure new YC profile for service account `${yandex_iam_service_account.sa_tf.name}` execute:
+#   ./.create-profile-${yandex_iam_service_account.sa_tf.name}.sh
+#   source ./.activate-profile-${yandex_iam_service_account.sa_tf.name}.sh
+# ***************
+# EOF
+# }
 
 # Remote backend configuration file content
-output "backend_tf" {
-  description = "Remote backend configuration file content.  (see README.md for details)"
-  value       = <<EOF
-terraform {
-  backend "s3" {
-    region         = "ru-central1"
-    bucket         = "${module.state_bucket.bucket_name}"
-    key            = "${var.init_prefix}"
+# output "backend_tf" {
+#   description = "Remote backend configuration file content.  (see README.md for details)"
+#   value       = <<EOF
+# terraform {
+#   backend "s3" {
+#     region         = "ru-central1"
+#     bucket         = "${module.state_bucket.bucket_name}"
+#     key            = "${var.init_prefix}"
 
-    dynamodb_table = "${aws_dynamodb_table.lock_table.id}"
+#     dynamodb_table = "${aws_dynamodb_table.lock_table.id}"
 
-    endpoints = {
-      s3       = "https://storage.yandexcloud.net",
-      dynamodb = "${yandex_ydb_database_serverless.database.document_api_endpoint}"
-    }
+#     endpoints = {
+#       s3       = "https://storage.yandexcloud.net",
+#       dynamodb = "${yandex_ydb_database_serverless.database.document_api_endpoint}"
+#     }
 
-    skip_credentials_validation = true
-    skip_region_validation      = true
-    skip_requesting_account_id  = true
-    skip_s3_checksum            = true
-  }
-}
-EOF
-}
+#     skip_credentials_validation = true
+#     skip_region_validation      = true
+#     skip_requesting_account_id  = true
+#     skip_s3_checksum            = true
+#   }
+# }
+# EOF
+# }
 
 resource "local_file" "backend_tf" {
   content  = <<EOF
