@@ -256,8 +256,6 @@ docker run -p 80:80 site:1.0
 
 Пробую пока вручную загрузить образ в регистри:
 
-```
-
 Один из вариантов:
 
 ```
@@ -326,9 +324,9 @@ docker image rm 29cda006b448 --force
 3. Дашборды в grafana отображающие состояние Kubernetes кластера.
 4. Http доступ на 80 порту к тестовому приложению.
 
-#### Решение: Подготовка cистемы мониторинга и деплой приложения
+#### Решение по подготовке cистемы мониторинга и деплой приложения
 
-Посмотрел пример как создать сетевое приложение: https://yandex.cloud/ru/docs/managed-kubernetes/operations/create-load-balancer#simple-app
+Согласно документации: https://yandex.cloud/ru/docs/managed-kubernetes/operations/create-load-balancer#simple-app
 
 Подготовил файл для деплоя приложения в кубернетис:
 
@@ -342,6 +340,34 @@ docker image rm 29cda006b448 --force
 Добавил файл: 
 `terraform\1_init\helm.tf`
 И добавил файл со значениями параметров: `terraform\1_init\values\chart-monitoring.yaml`
+
+Применил через терраформ.
+
+В кластере проверяю:
+
+![alt text](image-29.png)
+
+Смотрю IP:
+
+```
+kubectl get ingress -n kube-monitoring
+```
+
+```
+NAME                            CLASS   HOSTS         ADDRESS         PORTS   AGE
+kube-monitoring-stack-grafana   nginx   mon.dmil.ru   84.201.149.40   80      99m
+```
+
+Создаю DNS запись mon.dmil.ru для 84.201.149.40 на отдельном имеющимся у меея хостинге.
+
+Можно смотреть мониторинг кластера:
+
+пароль "adminadmin" 
+https://mon.dmil.ru 
+
+
+![alt text](image-30.png)
+
 
 ---
 ### Установка и настройка CI/CD
