@@ -23,7 +23,7 @@ alertmanager:
 
 grafana:
   enabled: true
-  adminPassword: admin
+  adminPassword: adminadmin
   ingress:
     enabled: true
     ingressClassName: nginx
