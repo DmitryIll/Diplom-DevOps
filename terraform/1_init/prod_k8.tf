@@ -14,7 +14,7 @@ module "kube" {
   folder_id            = local.folder_id #var.folder_id
   network_id           = yandex_vpc_network.prod_net.id  #module.net.vpc_id
   public_access        = true
-  security_groups_ids_list = yandex_vpc_security_group.k8s-public-services.id
+  security_groups_ids_list = [yandex_vpc_security_group.k8s_public_services.id]
 
   custom_ingress_rules = {
       "rule1" = {

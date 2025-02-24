@@ -1,5 +1,5 @@
 
-resource "yandex_vpc_security_group" "k8s-public-services" {
+resource "yandex_vpc_security_group" "k8s_public_services" {
   name        = "k8s-public-services"
   description = "Правила группы разрешают подключение к сервисам из интернета. Примените правила только для групп узлов."
   network_id  = yandex_vpc_network.prod_net.id
