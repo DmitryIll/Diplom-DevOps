@@ -339,7 +339,9 @@ docker image rm 29cda006b448 --force
 ![alt text](image-28.png)
 
 Для деплоя системы мониторинга использую helm-chart и провайдер для терраформа для управления helm.
-Добавил файл: terraform\1_init\helm.tf
+Добавил файл: 
+`terraform\1_init\helm.tf`
+И добавил файл со значениями параметров: `terraform\1_init\values\chart-monitoring.yaml`
 
 ---
 ### Установка и настройка CI/CD
