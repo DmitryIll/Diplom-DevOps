@@ -40,7 +40,27 @@ module "kube" {
       # }
     }
 
-  enable_cilium_policy = true
+    ```
+    custom_egress_rules = {
+      "rule1" = {
+        protocol       = "ANY"
+        description    = "rule-1"
+        v4_cidr_blocks = ["0.0.0.0/0"]
+        from_port      = 0
+        to_port        = 65535
+      },
+      # "rule2" = {
+      #   protocol       = "UDP"
+      #   description    = "rule-2"
+      #   v4_cidr_blocks = ["10.0.1.0/24"]
+      #   from_port      = 8090
+      #   to_port        = 8099
+      # }
+    }
+
+
+  # enable_cilium_policy = true
+  enable_cilium_policy = false
   # master_locations     = [for k, v in module.net.private_subnets : v ][0] # для зонального.
   # master_locations     = [for k, v in module.net.private_subnets : v ]
   master_locations     = [
