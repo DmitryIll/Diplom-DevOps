@@ -23,12 +23,12 @@ alertmanager:
 
 grafana:
   enabled: true
-  adminPassword: devops25
+  adminPassword: admin
   ingress:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - dev.ops.grafana
+      - mon.dmil.ru
     path: /
     tls: []
   sidecar:

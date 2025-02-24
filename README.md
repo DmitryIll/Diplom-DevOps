@@ -325,6 +325,22 @@ docker image rm 29cda006b448 --force
 2. Http доступ на 80 порту к web интерфейсу grafana.
 3. Дашборды в grafana отображающие состояние Kubernetes кластера.
 4. Http доступ на 80 порту к тестовому приложению.
+
+#### Решение: Подготовка cистемы мониторинга и деплой приложения
+
+Посмотрел пример как создать сетевое приложение: https://yandex.cloud/ru/docs/managed-kubernetes/operations/create-load-balancer#simple-app
+
+Подготовил файл для деплоя приложения в кубернетис:
+
+`https://github.com/DmitryIll/test-app/blob/main/kuber/site.yaml`
+
+Проверил, сайт открывается по внешнему IP (черз балансировщик пробрасываются запросы в кластер кубер):
+
+![alt text](image-28.png)
+
+Для деплоя системы мониторинга использую helm-chart и провайдер для терраформа для управления helm.
+Добавил файл: terraform\1_init\helm.tf
+
 ---
 ### Установка и настройка CI/CD
 
