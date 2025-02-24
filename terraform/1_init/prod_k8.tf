@@ -40,7 +40,6 @@ module "kube" {
       # }
     }
 
-    ```
     custom_egress_rules = {
       "rule1" = {
         protocol       = "ANY"
