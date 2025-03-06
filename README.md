@@ -27,18 +27,38 @@
 
 ---
 
-### Решение - определение целей и требований
+### Доформулирую требования
 
-Доформулирую цели, чтобы исходя из требований более точно определить требования к реализации решения.
-
-Цели:
 - Получить отказоустойчивую работу сайта компании в яндекс облаке (в кубернетис кластере).
 - Создать инфраструктуру в яндекс облаке, через подходы DevOps - обеспечить автоматическое управление инфраструктурой через IaC (при изменении кода, должна автоматически меняться инфраструктура).
 - У компании есть группа разработчиков, которые, на своих ПК разрабатывают сайт компании. Разработчики "на выходе" выдают статичные файлы html для веб сайта.
-- Спроектировать и реализовать решение: выбрать Web-сервер и развернуть его в облаке, настроить работу Web-сервера с файлами html, полученными от разработчиков - обеспечить рабту сайта компании. 
+- Спроектировать и реализовать решение: выбрать Web-сервер и развернуть его в облаке в отказоустойчивом кластере, настроить работу Web-сервера с файлами html, полученными от разработчиков - обеспечить рабту сайта компании. 
 - Развертывание инфраструктуры и управление должны быть через ПО Terraform. При этом terraform-state-backend файл должен находится в облаке в S3 хранилище + обеспечивать работу блокировки tfstate-backend.
 
+### Общее описание решения
 
+Использую два облака:
+
+![alt text](image-32.png)
+
+В первом создал облачный сервис gitlab для выполнения автоматизации и ВМ - раннер для gitlab. 
+Эти ресурсы использую дял автоматизации - последний этап задания.
+
+Второе облако "init" - тут prod-среда - сайт компании в кластере и вся инфраструктура, которую развертываию через автоматизацию.
+
+Итоговый IaC код в сервисе gitlab в репозиториях:
+
+- https://gitla.gitlab.yandexcloud.net/d-site/infra - тут IaC инфраструктуры.
+- https://gitla.gitlab.yandexcloud.net/d-site/site - тут IaC сайта.
+
+Результаты работы автоматизации можно смотреть тут соотвественно:
+
+- https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs - для создания инфраструктуры (и управления).
+- https://gitla.gitlab.yandexcloud.net/d-site/site/-/jobs - для сборки и деплоя приложения - сайта
+
+Код IaC терраформа, который в этом репозитории в папке `terraform` - использовался на этапах до создания автоматизации - оставил для истории.
+После того как создал автоматизацию код далее переместил и развивал уже в репозиториях gitlab сервиса в яндекс облаке.
+Поэтому окончательнй код см. в репозиториях gitlab (ссылки даны выше).
 ---
 
 ### Создание облачной инфраструктуры
@@ -243,8 +263,12 @@ kubectl get nodes
 
 #### Решение по созданию тестового приложения
 
-* создал регистри для хранения docker images в яндекс облаке - см. файл `terraform\1_init\registry.tf`
+* создал регистри для хранения docker images в яндекс облаке - см. файл `terraform\1_init\registry.tf` 
+
+* но в итоге все же использовал для простоты hub.docker.com для хранения там своих образов.
+
 * Создал репозиторий `https://github.com/DmitryIll/test-app.git` и в него поместил статичные файлы сайта и файл docker compose.
+* после создания автоматизации - итоговый код см. в репозиториях gitlab (ссылки даны были выше).
 * тестирую приложение пока в докер контейнере:
 ```
 docker build -t site:1.0 .
@@ -390,52 +414,84 @@ https://mon.dmil.ru
 
 #### Решение по установке и настройке CI/CD
 
-Использовать gitlab.com не получилось, т.к. там что бы запустить pipline нужно авторизоваться по номеру телефону не российскому.
-Поставил свой gitlab на отдельной ВМ.
-Развернул прикрутиел к нему свой домен git.dmil.ru  - gitlab заработал (на самоподписном сертификате для https), но, не удается зарегистрировать раннер:
-
-![alt text](image-31.png)
-
-```
-root@git-lab:/etc/gitlab# docker run -ti --rm --name gitlab-runner       --network host       -v /srv/gitlab-runner/config:/etc/gitlab-runner       -v /var/run/docker.sock:/var/run/docker.sock    gitlab/gitlab-runner:latest    register
-Runtime platform                                    arch=amd64 os=linux pid=7 revision=c4cbe9dd version=17.9.0
-Running in system-mode.
-
-Enter the GitLab instance URL (for example, https://gitlab.com/):
-https://git.dmil.ru/
-Enter the registration token:
-GR1348941ifC3VE8Ep_3Rs1KmfQ2G
-Enter a description for the runner:
-[git-lab]:
-Enter tags for the runner (comma-separated):
-
-Enter optional maintenance note for the runner:
-
-WARNING: Support for registration tokens and runner parameters in the 'register' command has been deprecated in GitLab Runner 15.6 and will be replaced with support for authentication tokens. For more information, see https://docs.gitlab.com/ee/ci/runners/new_creation_workflow
-ERROR: Registering runner... failed                 runner=GR1348941ifC3VE8E status=couldn't execute POST against https://git.dmil.ru/api/v4/runners: Post "https://git.dmil.ru/api/v4/runners": tls: failed to verify certificate: x509: certificate relies on legacy Common Name field, use SANs instead
-PANIC: Failed to register the runner.
-root@git-lab:/etc/gitlab#
-```
-
-Пока не понял что можно сделать. Ранее таких проблем не было.
-Поискал в интернте пока не нашел решения.
-Думаю попробовать еще раз развернуть gilab но, по http.
-
-Еще пробовал заказать управляемый сервис gitlab в яндекс облаке, но, там ошибка - имя сервиса не удается ввести - ошибка в GUI. Отослал запрос в поддержку яндекса.
-
-Буду пробовать дальше разбираться и искать решение.
+Пробовал использовать gitlab.com со своим раннером (т.к. иначе требуется авторизоваться по номеру телефону не российскому), но, gitlab.com работает очень медленно, поэтому использовал в итоге gitlab - сервис в яндекс облаке (создал).
 
 
-
-
----
 ## Что необходимо для сдачи задания?
 
 1. Репозиторий с конфигурационными файлами Terraform и готовность продемонстрировать создание всех ресурсов с нуля.
+
+Создание инфраструктуры: 
+https://gitla.gitlab.yandexcloud.net/d-site/infra
+
+Примеры отработки заданий автоматизации:
+
+Подготовка плана: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/284
+Применение плана: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/285 
+
+Ранее выполнял destroy: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/281 
+
 2. Пример pull request с комментариями созданными atlantis'ом или снимки экрана из Terraform Cloud или вашего CI-CD-terraform pipeline.
+
+Создание инфраструктуры:
+
+![alt text](image-33.png)
+
+и :
+
+![alt text](image-36.png)
+
+Сборка образа:
+
+![alt text](image-34.png)
+
+Деплой новой версии:
+
+![alt text](image-35.png)
+
 3. Репозиторий с конфигурацией ansible, если был выбран способ создания Kubernetes кластера при помощи ansible.
+- ansible не использовал, использовал облачный кубер.
 4. Репозиторий с Dockerfile тестового приложения и ссылка на собранный docker image.
+
+https://gitla.gitlab.yandexcloud.net/d-site/site
+
+Образы приложения в регистри:
+https://hub.docker.com/repository/docker/dmil25/site 
+
 5. Репозиторий с конфигурацией Kubernetes кластера.
+
+там же где и сайт в отдельной папке:
+
+https://gitla.gitlab.yandexcloud.net/d-site/site/-/tree/main/kuber?ref_type=heads
+
 6. Ссылка на тестовое приложение и веб интерфейс Grafana с данными доступа.
+
+логин: admin
+пароль: adminadmin
+
+Два варианта:
+c http:
+http://mon.dmil.ru/
+
+c https но с самоподписными сертификатами:
+
+https://mon.dmil.ru/
+
+Пример дашборда:
+
+http://mon.dmil.ru/d/09ec8aa1e996d6ffcd6817bbaff4db1b/kubernetes-api-server?orgId=1&refresh=10s
+
+![alt text](image-38.png)
+
+сам сайт:
+
+http://site.dmil.ru/
+
+
+![alt text](image-39.png)
+
 7. Все репозитории рекомендуется хранить на одном ресурсе (github, gitlab)
+
+
+
 
