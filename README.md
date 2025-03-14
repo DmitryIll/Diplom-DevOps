@@ -49,29 +49,31 @@
 
 Итоговый IaC код в сервисе gitlab в репозиториях:
 
-- https://gitla.gitlab.yandexcloud.net/d-site/infra - тут IaC инфраструктуры.
-- https://gitla.gitlab.yandexcloud.net/d-site/site - тут IaC сайта.
-
-Но, что бы не тратить ресурсы в яндекс облаке, пока этот gilab пока остановил.
-Готов включить если нжуно будет для демонстрации и проверки.
-
-Для ознакомления с кодом - код перенес еще и в бесплатный gitlab.com в два репозитория:
+В итоге код перенес в бесплатный gitlab.com в два репозитория:
 
 https://gitlab.com/d-site/infra
 https://gitlab.com/d-site/site  
 
+До этого ранее использовал сервис gilab в яндексе:
+- https://gitla.gitlab.yandexcloud.net/d-site/infra - тут IaC инфраструктуры.
+- https://gitla.gitlab.yandexcloud.net/d-site/site - тут IaC сайта.
+
+Но, что бы не тратить ресурсы в яндекс облаке, пока этот gilab остановил.
+
 
 Результаты работы автоматизации можно смотреть тут соотвественно:
-Если включен gitlab в яндекс облаке:
-- https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs - для создания инфраструктуры (и управления).
-- https://gitla.gitlab.yandexcloud.net/d-site/site/-/jobs - для сборки и деплоя приложения - сайта
-
-Так же можно посмотреть результаты выполнения кода на публичном gitlab.com:
 
 https://gitlab.com/d-site/infra/-/jobs
 https://gitlab.com/d-site/site/-/jobs 
 
-Код IaC терраформа, который в этом репозитории в папке `terraform` - использовался на этапах до создания автоматизации - оставил для истории.
+
+Если включить gitlab в яндекс облаке:
+- https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs - для создания инфраструктуры (и управления).
+- https://gitla.gitlab.yandexcloud.net/d-site/site/-/jobs - для сборки и деплоя приложения - сайта
+- пока выключен этот gitlab.
+
+
+Код IaC терраформа, который в текущем репозитории (где этот файл readme.md) в папке `terraform` - использовался на этапах до создания автоматизации - оставил для истории.
 После того как создал автоматизацию код далее переместил и развивал уже в репозиториях gitlab сервиса в яндекс облаке.
 Поэтому окончательнй код см. в репозиториях gitlab (ссылки даны выше).
 ---
@@ -429,7 +431,8 @@ https://mon.dmil.ru
 
 #### Решение по установке и настройке CI/CD
 
-Пробовал использовать gitlab.com со своим раннером (т.к. иначе требуется авторизоваться по номеру телефону не российскому), но, gitlab.com работает очень медленно, поэтому использовал в итоге gitlab - сервис в яндекс облаке (создал).
+Для отладки решения использовал gitlab - сервис в яндекс облаке (создал). Т.к. он более быстрый чем бесплатный на gitlab.com со своим раннером (т.к. иначе требуется авторизоваться по номеру телефону не российскому).
+Но, после отладки код перенес в gitlab.com и там проиграл автоматизацию.
 
 
 ## Что необходимо для сдачи задания?
@@ -437,16 +440,47 @@ https://mon.dmil.ru
 1. Репозиторий с конфигурационными файлами Terraform и готовность продемонстрировать создание всех ресурсов с нуля.
 
 Создание инфраструктуры: 
-https://gitla.gitlab.yandexcloud.net/d-site/infra
+https://gitlab.com/d-site/infra
 
-Примеры отработки заданий автоматизации:
+Деплой приложения:
+https://gitlab.com/d-site/site 
 
-Подготовка плана: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/284
-Применение плана: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/285 
+Пример отработки автоматизации:
+для инфраструктуры: https://gitlab.com/d-site/infra/-/jobs
+для сайта: https://gitlab.com/d-site/site/-/jobs
 
-Ранее выполнял destroy: https://gitla.gitlab.yandexcloud.net/d-site/infra/-/jobs/281 
+Подготовка плана для разворачивания инфраструктуры: 
+https://gitlab.com/d-site/infra/-/jobs/9415315725
+
+Разворачивание инфраструктуры:
+https://gitlab.com/d-site/infra/-/jobs/9415315734
+
+Еще в отдельной подпапке вспомогательная инфраструктура пример управления:
+
+Создание плана для дестроя яндекс регистри (который не стал использовать):
+https://gitlab.com/d-site/infra/-/jobs/9416406950
+
+Применение дестроя яндекс-регистри:
+https://gitlab.com/d-site/infra/-/jobs/9416406957
+
+Сборка образа для сайта:
+https://gitlab.com/d-site/site/-/jobs/9415944787
+
+Деплой сайта:
+https://gitlab.com/d-site/site/-/jobs/9415944793
+
+На 14.03.2025 - развернул сайт в облаке и настроил dns имя: 
+http://site.dmil.ru 
+
+Ранее выполнял дестрой инфраструктуры:
+https://gitlab.com/d-site/infra/-/jobs/9364774624 
+
 
 2. Пример pull request с комментариями созданными atlantis'ом или снимки экрана из Terraform Cloud или вашего CI-CD-terraform pipeline.
+
+Ссылки уже дал выже на джобы в gitlab.com.
+
+Ниже привожу скриншоты, когда делал отладку на gitlab в яндекс облаке:
 
 Создание инфраструктуры:
 
@@ -477,7 +511,9 @@ https://hub.docker.com/repository/docker/dmil25/site
 
 там же где и сайт в отдельной папке:
 
-https://gitla.gitlab.yandexcloud.net/d-site/site/-/tree/main/kuber?ref_type=heads
+
+https://gitlab.com/d-site/site/-/tree/main/kuber?ref_type=heads
+
 
 6. Ссылка на тестовое приложение и веб интерфейс Grafana с данными доступа.
 
@@ -494,7 +530,6 @@ https://mon.dmil.ru/
 
 Пример дашборда:
 
-http://mon.dmil.ru/d/09ec8aa1e996d6ffcd6817bbaff4db1b/kubernetes-api-server?orgId=1&refresh=10s
 
 ![alt text](image-38.png)
 
